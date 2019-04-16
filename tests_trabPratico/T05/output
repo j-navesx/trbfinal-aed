@@ -1,0 +1,56 @@
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> ajuda - Mostra os comandos existentes
+termina - Termina a execucao do programa
+regista - Regista um novo utilizador no programa
+entrada - Permite a entrada (”login”) dum utilizador no programa
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> ajuda - Mostra os comandos existentes
+termina - Termina a execucao do programa
+regista - Regista um novo utilizador no programa
+entrada - Permite a entrada (”login”) dum utilizador no programa
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> ajuda - Mostra os comandos existentes
+termina - Termina a execucao do programa
+regista - Regista um novo utilizador no programa
+entrada - Permite a entrada (”login”) dum utilizador no programa
+> password: fb@fct.unl.pt> ajuda - Mostra os comandos existentes
+sai - Termina a sessao deste utilizador no programa
+nova - Regista uma nova deslocacao
+lista - Lista todas ou algumas deslocacoes registadas
+boleia - Regista uma boleia para uma dada deslocacao
+retira - Retira uma dada boleia
+remove - Elimina uma dada deslocacao
+fb@fct.unl.pt> Fim de sessao. Obrigado Fernanda Maria Barbosa.
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> password: aa@fct.unl.pt> Fim de sessao. Obrigado Caloiro 1.
+> Utilizador nao existente.
+> password: mpmt@fct.unl.pt> ajuda - Mostra os comandos existentes
+sai - Termina a sessao deste utilizador no programa
+nova - Regista uma nova deslocacao
+lista - Lista todas ou algumas deslocacoes registadas
+boleia - Regista uma boleia para uma dada deslocacao
+retira - Retira uma dada boleia
+remove - Elimina uma dada deslocacao
+mpmt@fct.unl.pt> Fim de sessao. Obrigado Miguel Monteiro.
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> password: ab@fct.unl.pt> Comando inexistente.
+ab@fct.unl.pt> Fim de sessao. Obrigado Caloiro 1b.
+> password: Password incorrecta.
+password: Password incorrecta.
+password: Password incorrecta.
+> ajuda - Mostra os comandos existentes
+termina - Termina a execucao do programa
+regista - Regista um novo utilizador no programa
+entrada - Permite a entrada (”login”) dum utilizador no programa
+> password: ab@fct.unl.pt> Fim de sessao. Obrigado Caloiro 1b.
+> password: bt@fct.unl.pt> ajuda - Mostra os comandos existentes
+sai - Termina a sessao deste utilizador no programa
+nova - Regista uma nova deslocacao
+lista - Lista todas ou algumas deslocacoes registadas
+boleia - Regista uma boleia para uma dada deslocacao
+retira - Retira uma dada boleia
+remove - Elimina uma dada deslocacao
+bt@fct.unl.pt> Comando inexistente.
+bt@fct.unl.pt> Fim de sessao. Obrigado Bernardo Toninho.
+> Obrigado. Ate a proxima.

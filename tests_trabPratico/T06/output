@@ -1,0 +1,61 @@
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> ajuda - Mostra os comandos existentes
+termina - Termina a execucao do programa
+regista - Regista um novo utilizador no programa
+entrada - Permite a entrada (”login”) dum utilizador no programa
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> ajuda - Mostra os comandos existentes
+termina - Termina a execucao do programa
+regista - Regista um novo utilizador no programa
+entrada - Permite a entrada (”login”) dum utilizador no programa
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> ajuda - Mostra os comandos existentes
+termina - Termina a execucao do programa
+regista - Regista um novo utilizador no programa
+entrada - Permite a entrada (”login”) dum utilizador no programa
+> password: fb@fct.unl.pt> ajuda - Mostra os comandos existentes
+sai - Termina a sessao deste utilizador no programa
+nova - Regista uma nova deslocacao
+lista - Lista todas ou algumas deslocacoes registadas
+boleia - Regista uma boleia para uma dada deslocacao
+retira - Retira uma dada boleia
+remove - Elimina uma dada deslocacao
+fb@fct.unl.pt> Deslocacao registada. Obrigado Fernanda Maria Barbosa.
+fb@fct.unl.pt> Deslocacao registada. Obrigado Fernanda Maria Barbosa.
+fb@fct.unl.pt> Fim de sessao. Obrigado Fernanda Maria Barbosa.
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> password: aa@fct.unl.pt> ajuda - Mostra os comandos existentes
+sai - Termina a sessao deste utilizador no programa
+nova - Regista uma nova deslocacao
+lista - Lista todas ou algumas deslocacoes registadas
+boleia - Regista uma boleia para uma dada deslocacao
+retira - Retira uma dada boleia
+remove - Elimina uma dada deslocacao
+aa@fct.unl.pt> Deslocacao registada. Obrigado Caloiro 1.
+aa@fct.unl.pt> ajuda - Mostra os comandos existentes
+sai - Termina a sessao deste utilizador no programa
+nova - Regista uma nova deslocacao
+lista - Lista todas ou algumas deslocacoes registadas
+boleia - Regista uma boleia para uma dada deslocacao
+retira - Retira uma dada boleia
+remove - Elimina uma dada deslocacao
+aa@fct.unl.pt> Fim de sessao. Obrigado Caloiro 1.
+> password: bt@fct.unl.pt> Deslocacao registada. Obrigado Bernardo Toninho.
+bt@fct.unl.pt> Deslocacao registada. Obrigado Bernardo Toninho.
+bt@fct.unl.pt> Fim de sessao. Obrigado Bernardo Toninho.
+> password: fb@fct.unl.pt> ajuda - Mostra os comandos existentes
+sai - Termina a sessao deste utilizador no programa
+nova - Regista uma nova deslocacao
+lista - Lista todas ou algumas deslocacoes registadas
+boleia - Regista uma boleia para uma dada deslocacao
+retira - Retira uma dada boleia
+remove - Elimina uma dada deslocacao
+fb@fct.unl.pt> Deslocacao registada. Obrigado Fernanda Maria Barbosa.
+fb@fct.unl.pt> Deslocacao registada. Obrigado Fernanda Maria Barbosa.
+fb@fct.unl.pt> Fim de sessao. Obrigado Fernanda Maria Barbosa.
+> ajuda - Mostra os comandos existentes
+termina - Termina a execucao do programa
+regista - Regista um novo utilizador no programa
+entrada - Permite a entrada (”login”) dum utilizador no programa
+> Obrigado. Ate a proxima.
