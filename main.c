@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "boleia.h"
+#include "session.h"
 
 #define MAXL 50
 #define MAXC 10
