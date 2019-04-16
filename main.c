@@ -8,6 +8,8 @@
 #define MAXL 50
 #define MAXC 10
 
+#define MAXUSERS 10000
+
 //MENUS
 void inicialmenu();
 void sessionmenu(char * user);
@@ -31,6 +33,7 @@ void selecSai();
 
 
 int main(){
+    session s = intialize(MAXUSERS);
     inicialmenu();
     return 0;
 }
@@ -140,12 +143,20 @@ void selecAjudaI(){
 }
 
 char * selecEntrada(char * cmd){
+    char pass[7];
     printf("password: ");
-    return "admin";
 }
 
 void selecRegista(char * cmd){
-
+    char * user;
+    char * name;
+    char pass[7];
+    sscanf(cmd,"%*s %s", user);
+    printf("nome (maximo 50 caracteres): ");
+    fgets(name,50,stdin);
+    printf("password (entre 4 e 6 caracteres - digitos e letras): ");
+    fgets(pass,7,stdin);
+    registUser(user,name,pass);
 }
 
 void selecTermina(){

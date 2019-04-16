@@ -4,17 +4,20 @@
 #include <ctype.h>
 
 #include "boleia.h"
-
-#define MAXC 30
+#include "user.h"
+#include "iterador.h"
+#include "sequencia.h"
+#include "dicionario.h"
 
 struct _bol{
-    //User proprietario
-    char partida[MAXC];
-    char destino[MAXC];
+    user master;
+    char * partida;
+    char * destino;
     char data[11];
     int horaH;
     int horaM;
     int duracao;
     int lugaresLivres;
     //Users registados ligados com dicionarios
+    sequencia penduras;
 };
