@@ -33,7 +33,7 @@ void selecSai();
 
 
 int main(){
-    session s = intialize(MAXUSERS);
+    session s = initialize(MAXUSERS);
     inicialmenu();
     return 0;
 }
@@ -145,18 +145,19 @@ void selecAjudaI(){
 char * selecEntrada(char * cmd){
     char pass[7];
     printf("password: ");
+    return "admin";
 }
 
 void selecRegista(char * cmd){
-    char * user;
-    char * name;
+    char * user = NULL;
+    char * name = NULL;
     char pass[7];
     sscanf(cmd,"%*s %s", user);
     printf("nome (maximo 50 caracteres): ");
-    fgets(name,50,stdin);
+    fgets(name,50,stdin); //!Problema com fgets (Core Dumped)
     printf("password (entre 4 e 6 caracteres - digitos e letras): ");
     fgets(pass,7,stdin);
-    registUser(user,name,pass);
+    //registUser(user,name,pass);
 }
 
 void selecTermina(){

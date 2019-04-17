@@ -3,4 +3,6 @@
 
 typedef struct _sess *session;
 
+session initialize(int capUsers);
+
 #endif
