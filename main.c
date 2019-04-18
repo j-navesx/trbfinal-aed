@@ -7,19 +7,20 @@
 
 #define MAXL 50
 #define MAXC 10
+#define MAXPASS 7
 
 #define MAXUSERS 10000
 
 //MENUS
-void inicialmenu();
-void sessionmenu(char * user);
+void inicialmenu(session s);
+void sessionmenu(char * user, session s);
 int imenuselection(char * cmd);
 int smenuselection(char * cmd);
 
 //INICIAL SELECTIONS
 void selecAjudaI();
-char * selecEntrada(char * cmd);
-void selecRegista(char * cmd);
+int selecEntrada(char * user,char * cmd, session s);
+int selecRegista(char * cmd, session s);
 void selecTermina();
 
 //SESSION SELECTIONS
@@ -29,22 +30,27 @@ void selecBoleia();
 void selecRetira();
 void selecRemove();
 void selecLista();
-void selecSai();
+void selecSai(char * user, session s);
 
+//HELPER FUNCTIONS
+int checksize(char * input, int size);
+int checkdata(int dia, int mes, int ano);
+int checkhoranminuto(int hora,int minuto);
 
 int main(){
     session s = initialize(MAXUSERS);
-    inicialmenu();
+    inicialmenu(s);
     return 0;
 }
 
 //*INICIAL MENU
-void inicialmenu(){
+void inicialmenu(session s){
     char entryi[MAXL];
     char cmdi[MAXC] = "NULL";
     int cmdinti = '\0';
-    char * user;
+    char * user = (char*) malloc(MAXL);
     while(cmdinti != 3){
+        cmdi[0] = '\0';
         printf(">");
         fgets(entryi,MAXL-1,stdin);
         sscanf(entryi,"%s",cmdi);
@@ -54,12 +60,18 @@ void inicialmenu(){
                 selecAjudaI();
                 break;
             case 1:
-                if((user = selecEntrada(entryi) )!= NULL){
-                    sessionmenu(user);
+                sscanf(entryi,"%*s %s",user);
+                if(selecEntrada(user,entryi,s)){
+                    sessionmenu(user,s);
                 }
                 break;
             case 2:
-                selecRegista(entryi);
+                if(selecRegista(entryi,s)){
+                    printf("Registo efectuado.\n");
+                }
+                else{
+                    printf("Registo nao efectuado.\n");
+                }
                 break;
             case 3:
                 selecTermina();
@@ -72,11 +84,12 @@ void inicialmenu(){
 }
 
 //*SESSION MENU
-void sessionmenu(char * user){
+void sessionmenu(char * user, session s){
     char entrys[MAXL];
     char cmds[MAXC] = "NULL";
     int cmdints = '\0';
     while(cmdints != 6){
+        cmds[0] = '\0';
         printf("%s>",user);
         fgets(entrys,MAXL-1,stdin);
         sscanf(entrys,"%s",cmds);
@@ -101,7 +114,7 @@ void sessionmenu(char * user){
                 selecLista();
                 break;
             case 6:
-                selecSai();
+                selecSai(user,s);
                 break;
             default:
                 printf("Comando inexistente.\n");
@@ -142,22 +155,66 @@ void selecAjudaI(){
     printf("entrada - Permite a entrada (\"login\") dum utilizador no programa\n");
 }
 
-char * selecEntrada(char * cmd){
-    char pass[7];
-    printf("password: ");
-    return "admin";
+int selecEntrada(char * user,char * cmd, session s){
+    int tries = 1;
+    char * pass = (char*) malloc(MAXPASS);
+    if(checkuser(user,s)){
+        printf("password: ");
+        fgets(pass,MAXL,stdin);
+        while(!logIn(user,pass,s)){
+            printf("Password incorreta.\n");
+            if(tries == 3){
+                return 0;
+            }
+            printf("password: ");
+            fgets(pass,MAXL,stdin);
+            tries+=1;
+        }
+    }
+    else{
+        printf("Utilizador nao existente.\n");
+        return 0;
+    }
+    free(pass);
+    return 1;
 }
 
-void selecRegista(char * cmd){
-    char * user = NULL;
-    char * name = NULL;
-    char pass[7];
+int selecRegista(char * cmd, session s){
+    int finish = -1;
+    char * user = (char * ) malloc(MAXL);
+    char * name = (char * ) malloc(MAXL);
+    char * passtmp = (char *) malloc(MAXL);
+    char pass[MAXPASS];
+    int tries = 0;
     sscanf(cmd,"%*s %s", user);
-    printf("nome (maximo 50 caracteres): ");
-    fgets(name,50,stdin); //!Problema com fgets (Core Dumped)
-    printf("password (entre 4 e 6 caracteres - digitos e letras): ");
-    fgets(pass,7,stdin);
-    //registUser(user,name,pass);
+    if(checkuser(user,s)){
+        printf("Utilizador ja existe.\n");
+        finish = 0;
+    }
+    else{
+        printf("nome (maximo 50 caracteres): ");
+        fgets(name,MAXL,stdin);
+        name[strlen(name)-1] = '\0';
+        while ((!(checksize(passtmp,3)) || (checksize(passtmp,MAXPASS))) && tries++!=3){    
+            printf("password (entre 4 e 6 caracteres - digitos e letras): ");
+            fgets(passtmp,MAXL,stdin);
+            if ((!(checksize(passtmp,3)) || (checksize(passtmp,MAXPASS))) && tries!=0){
+                printf("Password incorreta.\n");
+            }
+        }
+        if(tries<=3){
+            strncpy(pass,passtmp,MAXPASS);
+            registUser(user,name,pass,s);
+            finish = 1;
+        }
+        else{
+            printf("Password incorreta.\n");
+            finish = 0;
+        }
+    }
+    free(name);
+    free(user);
+    return finish;
 }
 
 void selecTermina(){
@@ -177,7 +234,29 @@ void selecAjudaS(){
 }
 
 void selecNova(){
+    //TODO: Acabar
+    char * origem = (char *) malloc(MAXL);
+    char * destino = (char *) malloc(MAXL);
+    char * datacmd = (char *) malloc(MAXL);
+    int dia,mes,ano;
+    int hora,minuto = -1;
+    int duracao = -1;
+    int numLugares = -1;
+    
+    fgets(origem,MAXL,stdin);
+    fgets(destino,MAXL,stdin);
+    fgets(datacmd,MAXL,stdin);
 
+    if((sscanf(datacmd,"%d-%d-%d %d:%d %d %d",&dia,&mes,&ano,&hora,&minuto,&duracao,&numLugares)) != 7){
+        printf("Dados invalidos.\n");
+    }
+    else if(!checkdata(dia,mes,ano)){
+        printf("Dados invalidos.\n");
+    }
+
+    free(origem);
+    free(destino);
+    free(datacmd);
 }
 
 void selecBoleia(){
@@ -196,6 +275,54 @@ void selecLista(){
 
 }
 
-void selecSai(){
+void selecSai(char * user, session s){
+    printf("Fim de sessao.  Obrigado %s.\n", userName(user,s));
+}
+
+int checksize(char * input, int size){
+    if(strlen(input)>size){return 1;}
+    else{return 0;}
+}
+
+int checkdata(int dia, int mes, int ano){
+    int bisexto = 0;
+    int valida = 1;
+    if (ano >= 1800 && ano <= 9999){
+        if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)){
+            bisexto = 1;
+        }
+        if(mes >= 1 && mes <= 12){
+            if (mes == 2){
+                if (bisexto && dia == 29){
+                    valida = 1;
+                }
+                else if (dia > 28){
+                    valida = 0;
+                }
+            }
+ 
+            else if (mes == 4 || mes == 6 || mes == 9 || mes == 11){
+                if (dia > 30){
+                    valida = 0;
+                }
+            }
+
+            else if(dia > 31){            
+                valida = 0;
+            }        
+        }
+        
+        else{
+            valida = 0;
+        }
+ 
+    }
+    else{
+        valida = 0;
+    }
+    return valida;
+}
+
+int checkhoranminuto(int hora,int minuto){
 
 }

@@ -29,6 +29,27 @@ session initialize(int capUsers){
     return s;
 }
 
-void registUser(char * user, char * name, char * pass){
+void registUser(char * usr, char * name, char * pass, session s){
+    user us = fillUser(usr,name,pass);
+    adicionaElemDicionario(s->users,usr,us);
+}
+
+int checkuser(char * mail, session s){
+    return existeElemDicionario(s->users,mail);
+}
+
+int logIn(char * mail, char * pass, session s){
+    user us;
+    us = elementoDicionario(s->users,mail);
+    return (checkpass(us,pass));
+}
+
+char * userName(char * mail, session s){
+    user us;
+    us = elementoDicionario(s->users,mail);
+    return name(us);
+}
+
+void newDeslocacao(char * usr){
 
 }

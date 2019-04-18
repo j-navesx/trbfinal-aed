@@ -19,5 +19,10 @@ struct _bol{
     int duracao;
     int lugaresLivres;
     //Users registados ligados com dicionarios
-    sequencia penduras;
+    dicionario penduras;
 };
+
+boleia fillBoleia(){
+    boleia bol = (boleia) malloc(sizeof(struct _bol));
+    return bol;
+}
