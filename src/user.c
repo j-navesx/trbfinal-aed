@@ -4,6 +4,7 @@
 #include <ctype.h>
 
 #include "user.h"
+#include "boleia.h"
 #include "iterador.h"
 #include "sequencia.h"
 #include "dicionario.h"
@@ -17,7 +18,7 @@ struct _usr{
     char * nome;
     char hashedPass[PASS];
     //Deslocacao
-    sequencia deslocacoes;
+    dicionario dicboleias;
     int numDeslocacoes;
     //Registos ligados com dicionario
     dicionario boleiasregistadas;
@@ -42,10 +43,18 @@ user fillUser(char * mail, char * name, char * pass){
     us->nome = (char * ) malloc(strlen(name));
     strcpy(us->mail, mail);
     strcpy(us->nome, name);
+    us->dicboleias = criaDicionario(7,1);
+    us->boleiasregistadas = criaDicionario(7,1);
     encryption(us,pass);
     us->numDeslocacoes = 0;
     us->numBoleias = 0;
     return us;
+}
+
+void addDeslocacao(user us, char *origem, char *destino, char * data){
+    boleia bol = fillBoleia(us,origem,destino,data);
+    adicionaElemDicionario(us->dicboleias,giveData(bol),bol);
+    us->numDeslocacoes++;
 }
 
 int checkpass(user us, char *pass){

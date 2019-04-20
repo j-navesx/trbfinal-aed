@@ -13,4 +13,6 @@ int logIn(char * username, char * pass, session s);
 
 char * userName(char * mail, session s);
 
+void newDeslocacao(char * usr, session s, char * origem, char * destino, char * datacmd);
+
 #endif
