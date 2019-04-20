@@ -4,20 +4,20 @@
 #include <ctype.h>
 
 #include "session.h"
-#include "boleia.h"
 #include "user.h"
+#include "boleia.h"
 
 #include "iterador.h"
 #include "sequencia.h"
 #include "dicionario.h"
 
 struct _sess{
-    sequencia boleias;
     //Users dicionario
     dicionario users;
     int countBoleias;
 };
 
+//*INITIALIZER
 session initialize(int capUsers){
     session s;
     s = (session) malloc(sizeof(struct _sess));
@@ -29,6 +29,7 @@ session initialize(int capUsers){
     return s;
 }
 
+//*USER RELATED ACTIONS
 void registUser(char * usr, char * name, char * pass, session s){
     user us = fillUser(usr,name,pass);
     adicionaElemDicionario(s->users,usr,us);
@@ -50,6 +51,9 @@ char * userName(char * mail, session s){
     return name(us);
 }
 
-void newDeslocacao(char * usr){
-
+//*DESLOCACOES RELATED ACTIONS
+void newDeslocacao(char * usr, session s, char * origem, char * destino, char * datacmd){
+    user us = elementoDicionario(s->users,usr);
+    addDeslocacao(us,origem,destino,datacmd);
+    s->countBoleias++;
 }

@@ -25,7 +25,7 @@ void selecTermina();
 
 //SESSION SELECTIONS
 void selecAjudaS();
-void selecNova();
+void selecNova(char * usr, session s);
 void selecBoleia();
 void selecRetira();
 void selecRemove();
@@ -99,7 +99,7 @@ void sessionmenu(char * user, session s){
                 selecAjudaS();
                 break;
             case 1:
-                selecNova();
+                selecNova(user,s);
                 break;
             case 2:
                 selecBoleia();
@@ -233,8 +233,7 @@ void selecAjudaS(){
     printf("remove - Elimina uma dada deslocacao\n");
 }
 
-void selecNova(){
-    //TODO: Acabar
+void selecNova(char * usr, session s){
     char * origem = (char *) malloc(MAXL);
     char * destino = (char *) malloc(MAXL);
     char * datacmd = (char *) malloc(MAXL);
@@ -250,8 +249,12 @@ void selecNova(){
     if((sscanf(datacmd,"%d-%d-%d %d:%d %d %d",&dia,&mes,&ano,&hora,&minuto,&duracao,&numLugares)) != 7){
         printf("Dados invalidos.\n");
     }
-    else if(!checkdata(dia,mes,ano)){
+    else if(!checkdata(dia,mes,ano) && !checkhoranminuto(hora,minuto) && duracao<0 && numLugares<0){
         printf("Dados invalidos.\n");
+    }
+    else{
+        sprintf(datacmd,"%d-%d-%d %d:%d %d %d",dia,mes,ano,hora,minuto,duracao,numLugares);
+        newDeslocacao(usr,s,origem,destino,datacmd);
     }
 
     free(origem);
@@ -286,7 +289,7 @@ int checksize(char * input, int size){
 
 int checkdata(int dia, int mes, int ano){
     int bisexto = 0;
-    int valida = 1;
+    int valid = 1;
     if (ano >= 1800 && ano <= 9999){
         if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)){
             bisexto = 1;
@@ -294,35 +297,47 @@ int checkdata(int dia, int mes, int ano){
         if(mes >= 1 && mes <= 12){
             if (mes == 2){
                 if (bisexto && dia == 29){
-                    valida = 1;
+                    valid = 1;
                 }
                 else if (dia > 28){
-                    valida = 0;
+                    valid = 0;
                 }
             }
  
             else if (mes == 4 || mes == 6 || mes == 9 || mes == 11){
                 if (dia > 30){
-                    valida = 0;
+                    valid = 0;
                 }
             }
 
             else if(dia > 31){            
-                valida = 0;
+                valid = 0;
             }        
         }
         
         else{
-            valida = 0;
+            valid = 0;
         }
  
     }
     else{
-        valida = 0;
+        valid = 0;
     }
-    return valida;
+    return valid;
 }
 
 int checkhoranminuto(int hora,int minuto){
-
+    int valid;
+    if(hora>=0 && hora<=24){
+        if(minuto>=0 && minuto<60){
+            valid = 1;
+        }
+        else{
+            valid = 0;
+        }
+    }
+    else{
+        valid = 0;
+    }
+    return valid;
 }
