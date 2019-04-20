@@ -24,11 +24,8 @@ struct _bol{
 
 boleia fillBoleia(user us, char * origem, char * destino,char * data){
     boleia bol = (boleia) malloc(sizeof(struct _bol));
-<<<<<<< HEAD:src/boleia.c
     bol->origem = (char *) malloc(strlen(origem));
     bol->destino = (char *) malloc(strlen(destino));
-=======
->>>>>>> 336f79890b1f046b2bef1b1d0aaddff4d982a1bb:src/boleia.c
     bol->master = us;
     strcpy(bol->origem, origem);
     strcpy(bol->destino,destino);
