@@ -29,7 +29,8 @@ void selecNova(char * usr, session s);
 void selecBoleia();
 void selecRetira();
 void selecRemove();
-void selecLista();
+void selecLista(char * cmd, session s);
+void listMenu(int selection);
 void selecSai(char * user, session s);
 
 //HELPER FUNCTIONS
@@ -111,7 +112,7 @@ void sessionmenu(char * user, session s){
                 selecRemove();
                 break;
             case 5:
-                selecLista();
+                selecLista(entrys,s);
                 break;
             case 6:
                 selecSai(user,s);
@@ -274,8 +275,43 @@ void selecRemove(){
 
 }
 
-void selecLista(){
+void selecLista(char * cmd, session s){
+    char * option = (char *) malloc(MAXL);
+    sscanf(cmd,"%*s %s",option);
+    int selec = -1;
+    //KEYWORDS
+    char * cmds[] = {"minhas","boleias",};
+    for(int i=0; i<(sizeof(cmds)/8);i++){
+        if(!strcmp(option,cmds[i])){
+            selec = i;
+        }
+    }
+    //MAIL
+    if(strchr(option,'@')!=NULL){
+        selec = 2;
+    }
+    //DATE
+    else if(strchr(option,'-')!=NULL){
+        selec = 3;
+    }
+    listMenu(selec);
+}
 
+void listMenu(int selection){
+    switch(selection){
+        case 0:
+            printf("Minhas\n");
+            //TODO: Printf Minhas
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        default:
+            break;
+    }
 }
 
 void selecSai(char * user, session s){
