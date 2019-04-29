@@ -18,8 +18,8 @@ struct _bol{
     int horaM;
     int duracao;
     int lugaresLivres;
-    //Users registados ligados com dicionarios
-    dicionario penduras;
+    //sequencia de users
+    sequencia penduras;
 };
 
 boleia fillBoleia(user us, char * origem, char * destino,char * data){
@@ -30,9 +30,31 @@ boleia fillBoleia(user us, char * origem, char * destino,char * data){
     strcpy(bol->origem, origem);
     strcpy(bol->destino,destino);
     sscanf(data,"%s %d:%d %d %d",bol->data,&bol->horaH,&bol->horaM,&bol->duracao,&bol->lugaresLivres);
+    bol->penduras = criaSequencia(bol->lugaresLivres);
     return bol;
 }
 
-char * giveData(boleia bol){
+char * giveMaster(boleia bol){
+    return mail(bol->master);
+}
+char * giveOrigem(boleia bol){
+    return bol->origem;
+}
+char * giveDestino(boleia bol){
+    return bol->destino;
+}
+char * giveDate(boleia bol){
     return bol->data;
+}
+int giveHorah(boleia bol){
+    return bol->horaH;
+}
+int giveHoram(boleia bol){
+    return bol->horaM;
+}
+int giveDuracao(boleia bol){
+    return bol->duracao;
+}
+int giveLugares(boleia bol){
+    return bol->lugaresLivres;
 }

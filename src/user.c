@@ -17,7 +17,7 @@ struct _usr{
     char mail[MAXMAIL];
     char * nome;
     char hashedPass[PASS];
-    //Deslocacao
+    //Deslocacao (sem ser ordenado)
     dicionario dicboleias;
     int numDeslocacoes;
     //Registos ligados com dicionario
@@ -53,8 +53,23 @@ user fillUser(char * mail, char * name, char * pass){
 
 void addDeslocacao(user us, char *origem, char *destino, char * data){
     boleia bol = fillBoleia(us,origem,destino,data);
-    adicionaElemDicionario(us->dicboleias,giveData(bol),bol);
+    adicionaElemDicionario(us->dicboleias,giveDate(bol),bol);
     us->numDeslocacoes++;
+}
+
+void getDeslocacao(user us, void ** lista){
+    iterador it = iteradorDicionario(us->dicboleias);
+    boleia bolaux;
+    int id = 0;
+    while(temSeguinteIterador(it)){
+        bolaux = seguinteIterador(it);
+        lista[id] = bolaux;
+        id++;
+    }
+}
+
+int getnDeslocacoes(user us){
+    return us->numDeslocacoes;
 }
 
 int checkpass(user us, char *pass){
@@ -73,4 +88,7 @@ int checkpass(user us, char *pass){
 
 char * name(user us){
     return us->nome;
+}
+char * mail(user us){
+    return us->mail;
 }

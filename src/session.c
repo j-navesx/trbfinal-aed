@@ -3,9 +3,9 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "session.h"
 #include "user.h"
 #include "boleia.h"
+#include "session.h"
 
 #include "iterador.h"
 #include "sequencia.h"
@@ -56,4 +56,77 @@ void newDeslocacao(char * usr, session s, char * origem, char * destino, char * 
     user us = elementoDicionario(s->users,usr);
     addDeslocacao(us,origem,destino,datacmd);
     s->countBoleias++;
+}
+
+void ** sortDeslocacoes(char * usr, session s){
+    user us = elementoDicionario(s->users,usr);
+    int numDeslocacao = getnDeslocacoes(us);
+    void ** lista = malloc(sizeof(boleia)*getnDeslocacoes(us));
+    void ** sorted = malloc(sizeof(boleia)*getnDeslocacoes(us));
+    getDeslocacao(us,lista);
+    *sorted = sortLista(*lista,getnDeslocacoes(us));
+    return sorted;
+}
+
+char * getInfo(boleia lista){
+    char * info = malloc(sizeof(lista));
+    
+    char * master = giveMaster(lista);
+    char * origem = giveOrigem(lista);
+    char * destino = giveDestino(lista);
+    char * data = giveDate(lista);
+    int horaH = giveHorah(lista);
+    int horaM = giveHoram(lista);
+    int duracao = giveDuracao(lista);
+    int lugaresLivres = giveLugares(lista);
+
+    sprintf(info,"%s %s %s %s %d:%d %d %d",master, origem,destino,data,horaH,horaM,duracao,lugaresLivres);
+    return info;
+}
+
+boleia * sortLista(boleia * lista,int size){
+    int i, j;
+    boleia key;
+    for (i = 1; i < size; i++) { 
+        key = lista[i];
+        j = i - 1;
+        while (j >= 0 && !compareDate(giveDate(lista[j]),giveDate(key))) { 
+            lista[j + 1] = lista[j]; 
+            j = j - 1; 
+        } 
+        lista[j + 1] = key; 
+    } 
+
+    return lista;
+}
+
+int compareDate(char * date1, char * date2){
+    int menor = -1;
+    int dia1,mes1,ano1;
+    int dia2,mes2,ano2;
+    sscanf(date1,"%d-%d-%d",&dia1,&mes1,&ano1);
+    sscanf(date1,"%d-%d-%d",&dia2,&mes2,&ano2);
+    if(ano1<ano2){
+        menor = 1;
+    }
+    else if(ano1==ano2){
+        if(mes1<mes2){
+            menor = 1;
+        }
+        else if(mes1==mes2){
+            if(dia1<dia2){
+                menor = 1;
+            }
+            else{
+                menor = 0;
+            }
+        }
+        else{
+            menor = 0;
+        }
+    }
+    else{
+        menor = 0;
+    }
+    return menor;
 }
