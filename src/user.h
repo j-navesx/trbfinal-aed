@@ -7,7 +7,11 @@ user fillUser(char * mail, char * name, char * pass);
 
 void addDeslocacao(user us, char *origem, char *destino, char * data);
 
-void getDeslocacao(user us, void ** lista);
+iterador getDeslocacaoOrd(user us);
+
+int insertionSort(boleia elempos, boleia elem);
+
+int compareDate(char * date1, char * date2);
 
 int getnDeslocacoes(user us);
 

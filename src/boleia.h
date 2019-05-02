@@ -3,7 +3,7 @@
 
 typedef struct _bol *boleia;
 
-boleia fillBoleia(user us, char * origem, char * destino,char * data);
+boleia fillBoleia(char * mail, char * origem, char * destino,char * data);
 
 char * giveMaster(boleia bol);
 

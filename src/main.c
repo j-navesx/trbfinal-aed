@@ -4,11 +4,17 @@
 #include <ctype.h>
 #include <time.h>
 
+#include "iterador.h"
+
+#include "boleia.h"
+#include "user.h"
 #include "session.h"
 
 #define MAXL 50
 #define MAXC 10
-#define MAXPASS 7
+
+#define MINPASS 4
+#define MAXPASS 6
 
 #define MAXUSERS 10000
 
@@ -40,6 +46,7 @@ void selecSai(char * user, session s);
 
 //HELPER FUNCTIONS
 int checksize(char * input, int size);
+int verifypass(char * cmd);
 int checkdata(int dia, int mes, int ano);
 int checkhoranminuto(int hora,int minuto);
 
@@ -57,7 +64,7 @@ void inicialmenu(session s){
     char * user = (char*) malloc(MAXL);
     while(cmdinti != 3){
         cmdi[0] = '\0';
-        printf(">");
+        printf("> ");
         fgets(entryi,MAXL-1,stdin);
         sscanf(entryi,"%s",cmdi);
         cmdinti = imenuselection(cmdi);
@@ -96,7 +103,7 @@ void sessionmenu(char * user, session s){
     int cmdints = '\0';
     while(cmdints != 6){
         cmds[0] = '\0';
-        printf("%s>",user);
+        printf("%s> ",user);
         fgets(entrys,MAXL-1,stdin);
         sscanf(entrys,"%s",cmds);
         cmdints = smenuselection(cmds);
@@ -218,8 +225,6 @@ int selecRegista(char * cmd, session s){
             finish = 0;
         }
     }
-    free(name);
-    free(user);
     return finish;
 }
 
@@ -257,7 +262,7 @@ void selecNova(char * usr, session s){
     if((sscanf(datacmd,"%d-%d-%d %d:%d %d %d",&dia,&mes,&ano,&hora,&minuto,&duracao,&numLugares)) != 7){
         printf("Dados invalidos.\n");
     }
-    else if(!checkdata(dia,mes,ano) && !checkhoranminuto(hora,minuto) && duracao<0 && numLugares<0){
+    else if(!checkdata(dia,mes,ano) || !checkhoranminuto(hora,minuto) || duracao<0 || numLugares<0){
         printf("Dados invalidos.\n");
     }
     else{
@@ -307,8 +312,7 @@ void selecLista(char * cmd, session s, char * user){
 void listMenu(int selection, session s, char * master,char * data){
     switch(selection){
         case 0:
-            printf("Minhas\n");
-            //TODO: Printf Minhas
+            printf("Minhas\n");\
             listaMinhas(s,master);
             break;
         case 1:
@@ -328,21 +332,29 @@ void listMenu(int selection, session s, char * master,char * data){
     }
 }
 
+void displayViagens(boleia bol){
+    printf("%s\n",giveMaster(bol));
+    printf("%s\n%s\n",giveOrigem(bol),giveDestino(bol));
+    printf("%s %d:%d %d %d\n\n",giveDate(bol),giveHorah(bol),giveHoram(bol),giveDuracao(bol),giveLugares(bol));
+}
+
 void listaMinhas(session s, char * user){
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    int day = tm.tm_mday;
-    void ** list = sortDeslocacoes(user,s);
-    char * info = getInfo(list[0]);
-    //TODO: Iterador (session)
-    printf("\n%s\n",info);
-    //!ERRO Nao consigo guardar num vetor (agora estou com memory corruption)
-    info = getInfo(list[1]);
-    printf("\n%s\n",info);
+    iterador deslocacoes = listDeslocacoes(user,s);
+    boleia bol;
+    char * info = (char *) malloc(sizeof(MAXL));
+    while(temSeguinteIterador(deslocacoes)){
+        displayViagens(seguinteIterador(deslocacoes));
+    }
+    destroiIterador(deslocacoes);
 }
 
 void selecSai(char * user, session s){
     printf("Fim de sessao.  Obrigado %s.\n", userName(user,s));
+}
+
+int verifypass(char * cmd){
+    int * ola;
+    return 0;
 }
 
 int checksize(char * input, int size){

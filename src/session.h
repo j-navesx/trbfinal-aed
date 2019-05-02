@@ -1,8 +1,8 @@
 #ifndef _H_SESSION
 #define _H_SESSION
 
-#include "user.h"
 #include "boleia.h"
+#include "user.h"
 
 typedef struct _sess *session;
 
@@ -18,12 +18,6 @@ char * userName(char * mail, session s);
 
 void newDeslocacao(char * usr, session s, char * origem, char * destino, char * datacmd);
 
-void ** sortDeslocacoes(char * usr, session s);
-
-char * getInfo(boleia lista);
-
-boleia * sortLista(boleia * lista,int size);
-
-int compareDate(char * date1, char * date2);
+iterador listDeslocacoes(char * usr, session s);
 
 #endif

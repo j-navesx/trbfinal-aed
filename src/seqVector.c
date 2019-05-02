@@ -73,7 +73,7 @@ void adicionaPosSequencia(sequencia s, void * elem, int i){
 void * removePosSequencia(sequencia s, int i){
 	void ** backup;
 	backup = (void**) malloc(sizeof(void*));
-	backup = s->elems[i];
+	backup = s->elems[i-1];
 	for(int j = i-1; j>s->numElems-1; j++){
 		s->elems[j] = s->elems[j+1];
 	}

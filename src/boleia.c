@@ -3,14 +3,15 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "user.h"
-#include "boleia.h"
 #include "iterador.h"
 #include "sequencia.h"
 #include "dicionario.h"
 
+#include "boleia.h"
+#include "user.h"
+
 struct _bol{
-    user master;
+    char * mail;
     char * origem;
     char * destino;
     char data[11];
@@ -22,11 +23,11 @@ struct _bol{
     sequencia penduras;
 };
 
-boleia fillBoleia(user us, char * origem, char * destino,char * data){
+boleia fillBoleia(char * mail, char * origem, char * destino,char * data){
     boleia bol = (boleia) malloc(sizeof(struct _bol));
     bol->origem = (char *) malloc(strlen(origem));
     bol->destino = (char *) malloc(strlen(destino));
-    bol->master = us;
+    bol->mail = mail;
     strcpy(bol->origem, origem);
     strcpy(bol->destino,destino);
     sscanf(data,"%s %d:%d %d %d",bol->data,&bol->horaH,&bol->horaM,&bol->duracao,&bol->lugaresLivres);
@@ -35,7 +36,7 @@ boleia fillBoleia(user us, char * origem, char * destino,char * data){
 }
 
 char * giveMaster(boleia bol){
-    return mail(bol->master);
+    return bol->mail;
 }
 char * giveOrigem(boleia bol){
     return bol->origem;
