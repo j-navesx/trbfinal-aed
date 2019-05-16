@@ -51,17 +51,28 @@ user fillUser(char * mail, char * name, char * pass){
 }
 
 boleia getDeslocacao(user us, char * date){
-    return (boleia)elementoDicionario(us->dicboleias,date);
+    if(existeElemDicionario(us->dicboleias,date)){
+        return (boleia)elementoDicionario(us->dicboleias,date);
+    }
+    return NULL;
 }
 
 boleia getBoleia(user us, char * date){
-    return (boleia)elementoDicionario(us->boleiasregistadas,date);
+    if(existeElemDicionario(us->boleiasregistadas,date)){
+        return (boleia)elementoDicionario(us->boleiasregistadas,date);
+    }
+    return NULL;
 }
 
 void addDeslocacao(user us, char *origem, char *destino, char * data){
     boleia bol = fillBoleia(mail(us),origem,destino,data);
     adicionaElemDicionario(us->dicboleias,giveDate(bol),bol);
     us->numDeslocacoes++;
+}
+
+void remDeslocacao(user us, char * date){
+    removeElemDicionario(us->dicboleias,date);
+    us->numDeslocacoes--;
 }
 
 void addBoleia(user us, boleia bol){
@@ -97,7 +108,7 @@ void insertionSort(iterador it, boleia * vetor){
     int i =0;
     while(temSeguinteIterador(it)){
         boldic = seguinteIterador(it);
-        for(i = id; i>0 && compareDate(giveDate(vetor[i-1]),giveDate(boldic)) != 1; i--){
+        for(i = id; i>0 && compareDate(giveDate(boldic),giveDate(vetor[i-1])) != 0; i--){
             vetor[i] = vetor[i-1];
         }
         vetor[i] = boldic;
@@ -111,7 +122,7 @@ int compareDate(char * date1, char * date2){
     int dia1,mes1,ano1;
     int dia2,mes2,ano2;
     sscanf(date1,"%d-%d-%d",&dia1,&mes1,&ano1);
-    sscanf(date1,"%d-%d-%d",&dia2,&mes2,&ano2);
+    sscanf(date2,"%d-%d-%d",&dia2,&mes2,&ano2);
     if(ano1<ano2){
         menor = 1;
     }
@@ -144,7 +155,7 @@ int getnDeslocacoes(user us){
 int checkpass(user us, char *pass){
     char * test = (char *) malloc(PASS);
     xorstring(us->hashedPass,PASS,test);
-    if(!strncmp(test,pass,8)){
+    if(strncmp(test,pass,8)){
         return 1;
     }
     else{

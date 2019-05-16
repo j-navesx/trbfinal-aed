@@ -45,6 +45,7 @@ void addPendura(boleia bol, void * pendura){
 
 void remPendura(boleia bol, int pos){
     removePosSequencia(bol->penduras,pos);
+    bol->numPenduras--;
 }
 
 int getPosUser(boleia bol, char * us){

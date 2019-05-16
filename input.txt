@@ -6,7 +6,10 @@ jn325
 nova
 Lisboa
 Setubal
-12-04-2019 15:00 90 5
+12-4-2019 15:00 90 5
+lista minhas
+remove 12-4-2019
+lista minhas
 sai
 regista @gui
 Gui

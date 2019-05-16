@@ -22,6 +22,8 @@ int userCheckBol(char * mail, char * date, session s);
 
 void newDeslocacao(char * usr, session s, char * origem, char * destino, char * datacmd);
 
+void delDeslocacao(char * usr, char * date, session s);
+
 int checkDeslocacao(char *usr, char * date, session s);
 
 int numEmptySeats(char * mail, char * date, session s);
@@ -35,6 +37,8 @@ iterador listDeslocacoes(char * usr, session s);
 iterador listBoleias(char * usr, session s);
 
 iterador listDatas(char * date, session s);
+
+void insertionSortAlpha(boleia * vetor, boleia bol, int size);
 
 iterador listUsersReg(boleia bol);
 

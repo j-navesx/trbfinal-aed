@@ -67,10 +67,6 @@ int userCheckBol(char * mail, char * date, session s){
 }
 
 //*DESLOCACOES RELATED ACTIONS
-void newDeslocacao(char * usr, session s, char * origem, char * destino, char * datacmd){
-    user us = elementoDicionario(s->users,usr);
-    addDeslocacao(us,origem,destino,datacmd);
-}
 
 int checkDeslocacao(char *usr, char * date, session s){
     int exist = 0;
@@ -82,8 +78,18 @@ int checkDeslocacao(char *usr, char * date, session s){
     return exist;
 }
 
+void newDeslocacao(char * usr, session s, char * origem, char * destino, char * datacmd){
+    user us = elementoDicionario(s->users,usr);
+    addDeslocacao(us,origem,destino,datacmd);
+}
+
+void delDeslocacao(char * usr, char * date, session s){
+    user us = elementoDicionario(s->users,usr);
+    remDeslocacao(us,date);
+}
+
 int numEmptySeats(char * mail, char * date, session s){
-    user master = elementoDicionario(s->users, date);
+    user master = elementoDicionario(s->users, mail);
     boleia bol = getDeslocacao(master,date);
     return (giveLugares(bol) - givenumPenduras(bol));
 }
@@ -119,11 +125,21 @@ iterador listDatas(char * date, session s){
         user us = seguinteIterador(it);
         boleia bol = getDeslocacao(us,date);
         if(bol != NULL){
-            vetor[id] = bol;
+            // vetor[id] = bol;
+            insertionSortAlpha(vetor,bol,id);
+            id++;
         }
     }
     destroiIterador(it);
-    return (criaIterador((void **)vetor,(id+1)));
+    return (criaIterador((void **)vetor,id));
+}
+
+void insertionSortAlpha(boleia * vetor, boleia bol, int size){
+    int i=0;
+    for(i = size; i>0 && strcmp(giveMaster(vetor[i-1]),giveMaster(bol))>0; i--){
+        vetor[i] = vetor[i-1];
+    }
+    vetor[i] = bol;
 }
 
 iterador listUsersReg(boleia bol){

@@ -39,9 +39,10 @@ void selecRetira(char * user, char * cmd, session s);
 void selecRemove(char * user, char * cmd, session s);
 void selecLista(char * cmd, session s, char * user);
 void listMenu(int selection, session s, char * user, char * option);
+void listaMinhas(session s, char * user);
 void listaUser(session s, char * user);
 void listaBoleias(session s, char * user);
-void listaDate(session s, char * date);
+void listaDate(session s, char * date, char * user);
 void selecSai(char * user, session s);
 
 //HELPER FUNCTIONS
@@ -179,7 +180,7 @@ int selecEntrada(char * user,char * cmd, session s){
         printf("password: ");
         fgets(pass,MAXL,stdin);
         while(!logIn(user,pass,s)){
-            printf("Password incorreta.\n");
+            printf("Password incorrecta.\n");
             if(tries == 3){
                 return 0;
             }
@@ -219,11 +220,13 @@ int selecRegista(char * cmd, session s){
 
         printf("password (entre 4 e 6 caracteres - digitos e letras): ");
         fgets(passtmp,MAXL,stdin);
-      
+        passtmp[strlen(passtmp)-1] = '\0';
+
         while (!(verifypass(passtmp)) && tries++!=3){    
             printf("Password incorrecta.\n");
             printf("password (entre 4 e 6 caracteres - digitos e letras): ");
             fgets(passtmp,MAXL,stdin);
+            passtmp[strlen(passtmp)-1] = '\0';
         }
         if(tries<=3){
             //COMPLETED
@@ -289,7 +292,7 @@ void selecNova(char * usr, session s){
     else{
         sprintf(datacmd,"%d-%d-%d %d:%d %d %d",dia,mes,ano,hora,minuto,duracao,numLugares);
         newDeslocacao(usr,s,origem,destino,datacmd);
-        printf("Deslocacao registada.  Obrigado %s.\n", userName(usr,s));
+        printf("Deslocacao registada. Obrigado %s.\n", userName(usr,s));
     }
 
     free(origem);
@@ -308,13 +311,13 @@ void selecBoleia(char * cmd, session s, char * mail){
     else if(!checkstrdata(data)){
         printf("Data invalida.\n");
     }
-    else if(strcmp(mail,master)!=0){
+    else if(strcmp(mail,master)==0){
         printf("%s nao pode dar boleia a si proprio. Boleia nao registada.\n",userName(mail,s));
     }
     else if(!checkDeslocacao(master,data,s)){
         printf("Deslocacao nao existe.\n");
     }
-    else if(!userCheckBol(mail,data,s)){
+    else if(userCheckBol(mail,data,s)){
         printf("%s ja registou uma boleia nesta data. Boleia nao registada.\n",userName(mail,s));
     }
     else if(numEmptySeats(master,data,s)==0){
@@ -351,7 +354,8 @@ void selecRemove(char * user, char * cmd, session s){
         printf("%s nesta data nao tem registo de deslocacao.\n",userName(user,s));
     }
     else{
-        //TODO: delDeslocacao
+        delDeslocacao(user,date,s);
+        printf("Deslocacao removida.\n");
     }
 }
 
@@ -380,7 +384,7 @@ void selecLista(char * cmd, session s, char * user){
 void listMenu(int selection, session s, char * master,char * data){
     switch(selection){
         case 0:
-            listaUser(s,master);
+            listaMinhas(s,master);
             break;
         case 1:
             listaBoleias(s,master);
@@ -389,7 +393,7 @@ void listMenu(int selection, session s, char * master,char * data){
             listaUser(s,data);
             break;
         case 3:
-            listaDate(s,data);
+            listaDate(s,data,master);
             break;
         default:
             break;
@@ -400,13 +404,16 @@ void displayViagens(boleia bol){
     printf("%s\n",giveMaster(bol));
     printf("%s\n%s\n",giveOrigem(bol),giveDestino(bol));
     printf("%s %d:%d %d %d\n",giveDate(bol),giveHorah(bol),giveHoram(bol),giveDuracao(bol),giveLugares(bol));
-    printf("Lugares Vagos: %d\n",(giveLugares(bol)-givenumPenduras(bol)));
+    printf("Lugares vagos: %d\n",(giveLugares(bol)-givenumPenduras(bol)));
     if(givenumPenduras(bol)>0){ 
-        printf("Boleias registadas:");
+        printf("Boleias:");
         iterador penduras = seqPenduras(bol);
         while(temSeguinteIterador(penduras)){
             char * username = seguinteIterador(penduras);
-            printf(" %s;", username);
+            printf(" %s", username);
+            if(temSeguinteIterador(penduras)){
+                printf(";");
+            }
         }
         printf("\n");
         destroiIterador(penduras);
@@ -417,8 +424,22 @@ void displayViagens(boleia bol){
     printf("\n");
 }
 
+void listaMinhas(session s, char * user){
+    iterador deslocacoes = listDeslocacoes(user,s);
+    if(temSeguinteIterador(deslocacoes)==0){
+        printf("%s nao tem deslocacoes registadas.\n",userName(user,s));
+    }
+    while(temSeguinteIterador(deslocacoes)){
+        displayViagens((boleia)seguinteIterador(deslocacoes));
+    }
+    destroiIterador(deslocacoes);
+}
+
 void listaUser(session s, char * user){
     iterador deslocacoes = listDeslocacoes(user,s);
+    if(temSeguinteIterador(deslocacoes)==0){
+        printf("Nao existem deslocacoes registadas para esse utilizador.\n");
+    }
     while(temSeguinteIterador(deslocacoes)){
         displayViagens((boleia)seguinteIterador(deslocacoes));
     }
@@ -427,14 +448,20 @@ void listaUser(session s, char * user){
 
 void listaBoleias(session s, char * user){
     iterador deslocacoes = listBoleias(user,s);
+    if(temSeguinteIterador(deslocacoes)==0){
+        printf("%s nao tem boleias registadas.\n",userName(user,s));
+    }
     while(temSeguinteIterador(deslocacoes)){
         displayViagens((boleia)seguinteIterador(deslocacoes));
     }
     destroiIterador(deslocacoes);
 }
 
-void listaDate(session s, char * date){
+void listaDate(session s, char * date, char * user){
     iterador deslocacoes = listDatas(date,s);
+    if(temSeguinteIterador(deslocacoes)==0){
+        printf("%s nao existem deslocacoes registadas para %s.\n",userName(user,s), date);
+    }
     while(temSeguinteIterador(deslocacoes)){
         displayViagens((boleia)seguinteIterador(deslocacoes));
     }
@@ -459,7 +486,7 @@ int verifypass(char * pass){
             others++;
         }
     }
-    if(letters>0 && numeric > 0 && others == 0 && strlen(pass)>=4 && strlen(pass)<=6){
+    if(letters>0 && numeric > 0 && others == 0 && strlen(pass)>=3 && strlen(pass)<=7){
         valid = 1;
     }
     return valid;

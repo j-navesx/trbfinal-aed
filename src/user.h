@@ -11,6 +11,8 @@ boleia getBoleia(user us, char * date);
 
 void addDeslocacao(user us, char *origem, char *destino, char * data);
 
+void remDeslocacao(user us, char * date);
+
 void addBoleia(user master, boleia bol);
 
 void remBoleia(user us, char * data);
