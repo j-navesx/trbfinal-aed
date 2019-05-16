@@ -1,0 +1,38 @@
+regista @naves
+Naves
+jn325
+entrada @naves
+jn325
+nova
+Lisboa
+Setubal
+12-04-2019 15:00 90 5
+sai
+regista @gui
+Gui
+gui15
+entrada @gui
+gui15
+boleia @naves 12-4-2019
+lista boleias
+lista @naves
+lista 12-4-2019
+sai
+entrada @naves
+jn325
+lista minhas
+sai
+regista @becca
+Bec
+bec13
+entrada @becca
+bec13
+boleia @naves 12-4-2019
+lista 12-4-2019
+lista @naves
+sai
+entrada @naves
+jn325
+lista minhas
+sai
+termina

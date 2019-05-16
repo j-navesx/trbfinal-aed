@@ -62,11 +62,13 @@ void * elementoPosSequencia(sequencia s, int i){
 
 
 void adicionaPosSequencia(sequencia s, void * elem, int i){
-	for(int j = s->numElems; j>(i-1); j--){
-		s->elems[j+1] = s->elems[j];
-	}
-	s->elems[i-1] = elem;
 	s->numElems++;
+    if (i < s->numElems) {
+        for(int k= s->numElems; k > i; k--) {
+        s->elems[k]= s->elems[k-1];
+        }
+    }
+    s->elems[i-1]= elem;
 }
 
 
@@ -84,8 +86,9 @@ void * removePosSequencia(sequencia s, int i){
 
 iterador iteradorSequencia(sequencia s){
 	//CUIDADO: DEVE DAR AO ITERADOR UMA COPIA DO VECTOR A PERCORRER
-	iterador i;
-	void ** vector = s->elems;
-	i = criaIterador(vector,s->capacidade);
-	return i;
+	void ** vector = (void **) malloc(sizeof(void*)*s->numElems);
+	for (int i=0;i<s->numElems;i++){
+		vector[i] = s->elems[i];
+	}
+	return criaIterador(vector,s->numElems);
 }

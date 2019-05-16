@@ -12,7 +12,8 @@
 
 #define MAXMAIL 20
 #define PASS 7
-#define KEY "aed18!"
+
+const char * key = "aed18!";
 
 struct _usr{
     char mail[MAXMAIL];
@@ -26,17 +27,14 @@ struct _usr{
     int numBoleias;
 };
 
-void xorstring(char * key,char * keyword, int max , char * out){
+void xorstring(char * keyword, int max , char * out){
     for(int i = 0; i<max;i++){
         out[i]=key[i]^keyword[i];
     }
 }
 
 void encryption(user us,char * pass){
-    char * key = (char *) malloc(PASS);
-    strcpy(key, KEY);
-    xorstring(key,pass,PASS,us->hashedPass);
-    free(key);
+    xorstring(pass,PASS,us->hashedPass);
 }
 
 user fillUser(char * mail, char * name, char * pass){
@@ -52,37 +50,60 @@ user fillUser(char * mail, char * name, char * pass){
     return us;
 }
 
+boleia getDeslocacao(user us, char * date){
+    return (boleia)elementoDicionario(us->dicboleias,date);
+}
+
+boleia getBoleia(user us, char * date){
+    return (boleia)elementoDicionario(us->boleiasregistadas,date);
+}
+
 void addDeslocacao(user us, char *origem, char *destino, char * data){
     boleia bol = fillBoleia(mail(us),origem,destino,data);
     adicionaElemDicionario(us->dicboleias,giveDate(bol),bol);
     us->numDeslocacoes++;
 }
 
+void addBoleia(user us, boleia bol){
+    adicionaElemDicionario(us->boleiasregistadas,giveDate(bol),bol);
+    us->numBoleias++;
+}
+
+void remBoleia(user us, char * data){
+    boleia bol = removeElemDicionario(us->boleiasregistadas,data);
+    int pos = getPosUser(bol,mail(us));
+    remPendura(bol,pos);
+}
+
 iterador getDeslocacaoOrd(user us){
     boleia * vetor = (boleia *) malloc(sizeof(boleia) * us->numDeslocacoes);
     int size = us->numDeslocacoes;
     iterador it = iteradorDicionario(us->dicboleias);
+    insertionSort(it,vetor);
+    return (criaIterador((void **)vetor,size));
+}
+
+iterador getBoleiasOrd(user us){
+    boleia * vetor = (boleia *) malloc(sizeof(boleia) * us->numBoleias);
+    int size = us->numBoleias;
+    iterador it = iteradorDicionario(us->boleiasregistadas);
+    insertionSort(it,vetor);
+    return (criaIterador((void **)vetor,size));
+}
+
+void insertionSort(iterador it, boleia * vetor){
     boleia boldic;
     int id = 0;
     int i =0;
     while(temSeguinteIterador(it)){
         boldic = seguinteIterador(it);
-        for(i = id; i>0 && insertionSort(vetor[i-1],boldic) != 1; i--){
+        for(i = id; i>0 && compareDate(giveDate(vetor[i-1]),giveDate(boldic)) != 1; i--){
             vetor[i] = vetor[i-1];
         }
         vetor[i] = boldic;
         id++;
     }
     destroiIterador(it);
-    return (criaIterador((void **)vetor,size));
-}
-
-int insertionSort(boleia elempos, boleia elem){
-
-    
-    return (compareDate(giveDate(elem),giveDate(elempos)));
-  
-
 }
 
 int compareDate(char * date1, char * date2){
@@ -121,11 +142,8 @@ int getnDeslocacoes(user us){
 }
 
 int checkpass(user us, char *pass){
-    char * key = (char *) malloc(PASS);
-    strcpy(key, KEY);
     char * test = (char *) malloc(PASS);
-    xorstring(key,us->hashedPass,PASS,test);
-    free(key);
+    xorstring(us->hashedPass,PASS,test);
     if(!strncmp(test,pass,8)){
         return 1;
     }

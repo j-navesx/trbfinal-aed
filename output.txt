@@ -1,0 +1,56 @@
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> password: @naves> Deslocacao registada.  Obrigado Naves.
+@naves> Fim de sessao. Obrigado Naves.
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> password: @gui> Gui nao pode dar boleia a si proprio. Boleia nao registada.
+@gui> @gui> @naves
+Lisboa
+Setubal
+12-4-2019 15:0 90 5
+Lugares Vagos: 5
+Sem boleias registadas.
+
+@gui> Date
+@naves
+Lisboa
+Setubal
+12-4-2019 15:0 90 5
+Lugares Vagos: 5
+Sem boleias registadas.
+
+@gui> Fim de sessao. Obrigado Gui.
+> password: @naves> @naves
+Lisboa
+Setubal
+12-4-2019 15:0 90 5
+Lugares Vagos: 5
+Sem boleias registadas.
+
+@naves> Fim de sessao. Obrigado Naves.
+> nome (maximo 50 caracteres): password (entre 4 e 6 caracteres - digitos e letras): Registo efetuado.
+> password: @becca> Bec nao pode dar boleia a si proprio. Boleia nao registada.
+@becca> Date
+@naves
+Lisboa
+Setubal
+12-4-2019 15:0 90 5
+Lugares Vagos: 5
+Sem boleias registadas.
+
+@becca> @naves
+Lisboa
+Setubal
+12-4-2019 15:0 90 5
+Lugares Vagos: 5
+Sem boleias registadas.
+
+@becca> Fim de sessao. Obrigado Bec.
+> password: @naves> @naves
+Lisboa
+Setubal
+12-4-2019 15:0 90 5
+Lugares Vagos: 5
+Sem boleias registadas.
+
+@naves> Fim de sessao. Obrigado Naves.
+> Obrigado. Ate a proxima.

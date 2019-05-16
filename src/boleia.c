@@ -21,6 +21,7 @@ struct _bol{
     int lugaresLivres;
     //sequencia de users
     sequencia penduras;
+    int numPenduras;
 };
 
 boleia fillBoleia(char * mail, char * origem, char * destino,char * data){
@@ -32,7 +33,37 @@ boleia fillBoleia(char * mail, char * origem, char * destino,char * data){
     strcpy(bol->destino,destino);
     sscanf(data,"%s %d:%d %d %d",bol->data,&bol->horaH,&bol->horaM,&bol->duracao,&bol->lugaresLivres);
     bol->penduras = criaSequencia(bol->lugaresLivres);
+    bol->numPenduras = 0;
     return bol;
+}
+
+void addPendura(boleia bol, void * pendura){
+    bol->numPenduras++;
+    adicionaPosSequencia(bol->penduras,pendura,bol->numPenduras);
+    
+}
+
+void remPendura(boleia bol, int pos){
+    removePosSequencia(bol->penduras,pos);
+}
+
+int getPosUser(boleia bol, char * us){
+    iterador it = iteradorSequencia(bol->penduras);
+    int pos = 0;
+    int id = 1;
+    while(temSeguinteIterador(it) && pos == 0){
+        char * m = mail((user)seguinteIterador(it));
+        if(strcmp(m,us) == 0){
+            pos = id;
+        }
+        id++;
+    }
+    destroiIterador(it);
+    return pos;
+}
+
+iterador seqPenduras(boleia bol){
+    return iteradorSequencia(bol->penduras);
 }
 
 char * giveMaster(boleia bol){
@@ -58,4 +89,7 @@ int giveDuracao(boleia bol){
 }
 int giveLugares(boleia bol){
     return bol->lugaresLivres;
+}
+int givenumPenduras(boleia bol){
+    return bol->numPenduras;
 }
