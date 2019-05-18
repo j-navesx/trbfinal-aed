@@ -46,10 +46,9 @@ void listaDate(session s, char * date, char * user);
 void selecSai(char * user, session s);
 
 //HELPER FUNCTIONS
-int checksize(char * input, int size);
 int verifypass(char * cmd);
-int checkstrdata(char * data);
-int checkdata(int dia, int mes, int ano);
+int checkstrdate(char * date);
+int checkdate(int dia, int mes, int ano);
 int checkhoranminuto(int hora,int minuto);
 char * lowerIN(char * input, int size);
 
@@ -61,28 +60,28 @@ int main(){
 
 //*INICIAL MENU
 void inicialmenu(session s){
-    char entryi[MAXL];
-    char cmdi[MAXC] = "NULL";
-    int cmdinti = '\0';
+    char cmdi[MAXL];
+    char selecti[MAXC] = "NULL";
+    int selecinti = '\0';
     char * user = (char*) malloc(MAXL);
-    while(cmdinti != 3){
-        cmdi[0] = '\0';
+    while(selecinti != 3){
+        selecti[0] = '\0';
         printf("> ");
-        fgets(entryi,MAXL-1,stdin);
-        sscanf(entryi,"%s",cmdi);
-        cmdinti = imenuselection(cmdi);
-        switch(cmdinti){
+        fgets(cmdi,MAXL-1,stdin);
+        sscanf(cmdi,"%s",selecti);
+        selecinti = imenuselection(selecti);
+        switch(selecinti){
             case 0:
                 selecAjudaI();
                 break;
             case 1:
-                sscanf(entryi,"%*s %s",user);
-                if(selecEntrada(user,entryi,s)){
+                sscanf(cmdi,"%*s %s",user);
+                if(selecEntrada(user,cmdi,s)){
                     sessionmenu(user,s);
                 }
                 break;
             case 2:
-                if(selecRegista(entryi,s)){
+                if(selecRegista(cmdi,s)){
                     printf("Registo efetuado.\n");
                 }
                 else{
@@ -101,16 +100,16 @@ void inicialmenu(session s){
 
 //*SESSION MENU
 void sessionmenu(char * user, session s){
-    char entrys[MAXL];
-    char cmds[MAXC] = "NULL";
-    int cmdints = '\0';
-    while(cmdints != 6){
-        cmds[0] = '\0';
+    char cmds[MAXL];
+    char selects[MAXC] = "NULL";
+    int selecints = '\0';
+    while(selecints != 6){
+        selects[0] = '\0';
         printf("%s> ",user);
-        fgets(entrys,MAXL-1,stdin);
-        sscanf(entrys,"%s",cmds);
-        cmdints = smenuselection(cmds);
-        switch(cmdints){
+        fgets(cmds,MAXL-1,stdin);
+        sscanf(cmds,"%s",selects);
+        selecints = smenuselection(selects);
+        switch(selecints){
             case 0:
                 selecAjudaS();
                 break;
@@ -118,16 +117,16 @@ void sessionmenu(char * user, session s){
                 selecNova(user,s);
                 break;
             case 2:
-                selecBoleia(entrys,s,user);
+                selecBoleia(cmds,s,user);
                 break;
             case 3:
-                selecRetira(user,entrys,s);
+                selecRetira(user,cmds,s);
                 break;
             case 4:
-                selecRemove(user,entrys,s);
+                selecRemove(user,cmds,s);
                 break;
             case 5:
-                selecLista(entrys,s,user);
+                selecLista(cmds,s,user);
                 break;
             case 6:
                 selecSai(user,s);
@@ -204,19 +203,17 @@ int selecRegista(char * cmd, session s){
     char * passtmp = (char *) malloc(MAXL);
     char pass[MAXPASS];
     int tries = 1;
-    //USER
+
     sscanf(cmd,"%*s %s", user);
     if(userCheck(user,s)){
         printf("Utilizador ja existente.\n");
         finish = 0;
     }
-    //NAME
     else{
         printf("nome (maximo 50 caracteres): ");
         fgets(name,MAXL,stdin);
         name[strlen(name)-1] = '\0';
         
-        //PASSint userCheckBol(char * mail, char * date, session s){
 
         printf("password (entre 4 e 6 caracteres - digitos e letras): ");
         fgets(passtmp,MAXL,stdin);
@@ -229,7 +226,6 @@ int selecRegista(char * cmd, session s){
             passtmp[strlen(passtmp)-1] = '\0';
         }
         if(tries<=3){
-            //COMPLETED
             strncpy(pass,passtmp,MAXPASS);
             registUser(user,name,pass,s);
             finish = 1;
@@ -281,7 +277,7 @@ void selecNova(char * usr, session s){
         printf("Dados invalidos.\n");
         printf("Deslocacao nao registada.\n");
     }
-    else if(!checkdata(dia,mes,ano) || !checkhoranminuto(hora,minuto) || duracao<0 || numLugares<0){
+    else if(!checkdate(dia,mes,ano) || !checkhoranminuto(hora,minuto) || duracao<0 || numLugares<0){
         printf("Dados invalidos.\n");
         printf("Deslocacao nao registada.\n");
     }
@@ -295,9 +291,6 @@ void selecNova(char * usr, session s){
         printf("Deslocacao registada. Obrigado %s.\n", userName(usr,s));
     }
 
-    free(origem);
-    free(destino);
-    free(datacmd);
 }
 
 void selecBoleia(char * cmd, session s, char * mail){
@@ -305,10 +298,11 @@ void selecBoleia(char * cmd, session s, char * mail){
     char * data = (char*) malloc(sizeof(char)*MAXL);
    
     sscanf(cmd,"%*s %s %s", master, data);
+    
     if(!userCheck(master,s)){
         printf("Utilizador nao existente.\n");
     }
-    else if(!checkstrdata(data)){
+    else if(!checkstrdate(data)){
         printf("Data invalida.\n");
     }
     else if(strcmp(mail,master)==0){
@@ -324,15 +318,17 @@ void selecBoleia(char * cmd, session s, char * mail){
          printf("%s nao existe lugar. Boleia nao registada.\n",userName(mail,s));
     }
     else{
-        newRegist(mail,master,data,s);
+        newPendura(mail,master,data,s);
         printf("Boleia registada.\n");
     }
 }
 
 void selecRetira(char * user, char * cmd, session s){
     char * date = (char*) malloc(sizeof(char)*MAXL);
+    
     sscanf(cmd,"%*s %s", date);
-    if(!checkstrdata(date)){
+    
+    if(!checkstrdate(date)){
         printf("Data invalida.\n");
     }
     else if(!userCheckBol(user,date,s)){
@@ -346,8 +342,10 @@ void selecRetira(char * user, char * cmd, session s){
 
 void selecRemove(char * user, char * cmd, session s){
     char * date = (char*) malloc(sizeof(char)*MAXL);
+    
     sscanf(cmd,"%*s %s",date);
-    if(!checkstrdata(date)){
+    
+    if(!checkstrdate(date)){
         printf("Data invalida.\n");
     }
     else if(!checkDeslocacao(user,date,s)){
@@ -364,8 +362,10 @@ void selecRemove(char * user, char * cmd, session s){
 
 void selecLista(char * cmd, session s, char * user){
     char * option = (char *) malloc(MAXL);
-    sscanf(cmd,"%*s %s",option);
     int selec = -1;
+    
+    sscanf(cmd,"%*s %s",option);
+    
     //KEYWORDS
     char * cmds[] = {"minhas","boleias",};
     for(int i=0; i<(sizeof(cmds)/8);i++){
@@ -430,6 +430,7 @@ void displayViagens(boleia bol){
 
 void listaMinhas(session s, char * user){
     iterador deslocacoes = listDeslocacoes(user,s);
+    
     if(temSeguinteIterador(deslocacoes)==0){
         printf("%s nao tem deslocacoes registadas.\n",userName(user,s));
     }
@@ -441,6 +442,7 @@ void listaMinhas(session s, char * user){
 
 void listaUser(session s, char * user){
     iterador deslocacoes = listDeslocacoes(user,s);
+    
     if(temSeguinteIterador(deslocacoes)==0){
         printf("Nao existem deslocacoes registadas para esse utilizador.\n");
     }
@@ -452,6 +454,7 @@ void listaUser(session s, char * user){
 
 void listaBoleias(session s, char * user){
     iterador deslocacoes = listBoleias(user,s);
+    
     if(temSeguinteIterador(deslocacoes)==0){
         printf("%s nao tem boleias registadas.\n",userName(user,s));
     }
@@ -463,6 +466,7 @@ void listaBoleias(session s, char * user){
 
 void listaDate(session s, char * date, char * user){
     iterador deslocacoes = listDatas(date,s);
+    
     if(temSeguinteIterador(deslocacoes)==0){
         printf("%s nao existem deslocacoes registadas para %s.\n",userName(user,s), date);
     }
@@ -479,6 +483,7 @@ void selecSai(char * user, session s){
 int verifypass(char * pass){
     int valid = 0;
     int numeric = 0, letters = 0, others = 0;
+    
     for(int i = 0; i < strlen(pass); i++){
         if(isalpha(pass[i])){
             letters++;
@@ -490,26 +495,26 @@ int verifypass(char * pass){
             others++;
         }
     }
+    
     if(letters>0 && numeric > 0 && others == 0 && strlen(pass)>=4 && strlen(pass)<=6){
         valid = 1;
     }
+    
     return valid;
 }
 
-int checksize(char * input, int size){
-    if(strlen(input)>size){return 1;}
-    else{return 0;}
-}
-
-int checkstrdata(char * data){
+int checkstrdate(char * date){
     int dia,mes,ano;
-    sscanf(data,"%d-%d-%d",&dia,&mes,&ano);
-    return (checkdata(dia,mes,ano));
+    
+    sscanf(date,"%d-%d-%d",&dia,&mes,&ano);
+    
+    return (checkdate(dia,mes,ano));
 }
 
-int checkdata(int dia, int mes, int ano){
+int checkdate(int dia, int mes, int ano){
     int bisexto = 0;
     int valid = 1;
+    
     if (ano >= 1800 && ano <= 9999){
         if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)){
             bisexto = 1;
@@ -539,14 +544,17 @@ int checkdata(int dia, int mes, int ano){
     else{
         valid = 0;
     }
+    
     if(ano<=0||mes<=0||dia<=0){
         valid = 0;
     }
+    
     return valid;
 }
 
 int checkhoranminuto(int hora,int minuto){
     int valid;
+    
     if(hora>=0 && hora<=24){
         if(minuto>=0 && minuto<60){
             valid = 1;
@@ -558,14 +566,18 @@ int checkhoranminuto(int hora,int minuto){
     else{
         valid = 0;
     }
+
     return valid;
 }
 char* lowerIN(char * input, int size){
     char *out = malloc(size);
     int i;
+    
     for(i = 0; i<size; i++){
         out[i] = tolower(input[i]);
     }
+
     out[i] = '\0';
+    
     return out;
 }

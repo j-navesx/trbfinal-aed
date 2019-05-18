@@ -47,11 +47,11 @@ int userLogin(char * mail, char * pass, session s){
 char * userName(char * mail, session s){
     user us;
     us = elementoDicionario(s->users,mail);
-    return name(us);
+    return getName(us);
 }
 
 char * userMail(user us){
-    return mail(us);
+    return getMail(us);
 }
 
 int userCheckBol(char * mail, char * date, session s){
@@ -94,7 +94,7 @@ int numEmptySeats(char * mail, char * date, session s){
     return (giveLugares(bol) - givenumPenduras(bol));
 }
 
-void newRegist(char * pendura, char * condutor, char * date, session s){
+void newPendura(char * pendura, char * condutor, char * date, session s){
     user condt = elementoDicionario(s->users,condutor);
     boleia bol = getDeslocacao(condt, date);
     user pend = elementoDicionario(s->users,pendura);

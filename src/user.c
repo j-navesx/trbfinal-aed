@@ -13,7 +13,12 @@
 #define MAXMAIL 20
 #define PASS 6
 
+//SECRET ENCRYPTION KEY
 const char * key = "aed18!";
+
+//ENCRYPTION FUNCTIONS
+void xorstring(char * keyword, int max , char * out);
+void encryption(user us,char * pass);
 
 struct _usr{
     char mail[MAXMAIL];
@@ -65,7 +70,7 @@ boleia getBoleia(user us, char * date){
 }
 
 void addDeslocacao(user us, char *origem, char *destino, char * data){
-    boleia bol = fillBoleia(mail(us),origem,destino,data);
+    boleia bol = fillBoleia(getMail(us),origem,destino,data);
     adicionaElemDicionario(us->dicboleias,giveDate(bol),bol);
     us->numDeslocacoes++;
 }
@@ -80,10 +85,10 @@ void addBoleia(user us, boleia bol){
     us->numBoleias++;
 }
 
-void remBoleia(user us, char * data){
-    boleia bol = removeElemDicionario(us->boleiasregistadas,data);
+void remBoleia(user us, char * date){
+    boleia bol = removeElemDicionario(us->boleiasregistadas,date);
     us->numBoleias--;
-    int pos = getPosUser(bol,mail(us));
+    int pos = getPosUser(bol,getMail(us));
     remPendura(bol,pos);
 }
 
@@ -165,9 +170,9 @@ int checkpass(user us, char *pass){
     }
 }
 
-char * name(user us){
+char * getName(user us){
     return us->nome;
 }
-char * mail(user us){
+char * getMail(user us){
     return us->mail;
 }

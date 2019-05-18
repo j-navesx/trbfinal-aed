@@ -54,7 +54,7 @@ int getPosUser(boleia bol, char * us){
     int id = 0;
     while(temSeguinteIterador(it) && pos == 0){
         id++;
-        char * m = mail((user)seguinteIterador(it));
+        char * m = getMail((user)seguinteIterador(it));
         if(strcmp(m,us) == 0){
             pos = id;
         }
