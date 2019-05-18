@@ -179,7 +179,7 @@ int selecEntrada(char * user,char * cmd, session s){
     if(userCheck(user,s)){
         printf("password: ");
         fgets(pass,MAXL,stdin);
-        while(!logIn(user,pass,s)){
+        while(!userLogin(user,pass,s)){
             printf("Password incorrecta.\n");
             if(tries == 3){
                 return 0;
@@ -306,7 +306,7 @@ void selecBoleia(char * cmd, session s, char * mail){
    
     sscanf(cmd,"%*s %s %s", master, data);
     if(!userCheck(master,s)){
-        printf("Utilizador inexistente.\n");
+        printf("Utilizador nao existente.\n");
     }
     else if(!checkstrdata(data)){
         printf("Data invalida.\n");
@@ -353,6 +353,9 @@ void selecRemove(char * user, char * cmd, session s){
     else if(!checkDeslocacao(user,date,s)){
         printf("%s nesta data nao tem registo de deslocacao.\n",userName(user,s));
     }
+    else if(existUsersReg(user,date,s)){
+        printf("%s ja nao pode eliminar esta deslocacao.\n",userName(user,s));
+    }
     else{
         delDeslocacao(user,date,s);
         printf("Deslocacao removida.\n");
@@ -396,6 +399,7 @@ void listMenu(int selection, session s, char * master,char * data){
             listaDate(s,data,master);
             break;
         default:
+            listaUser(s,data);
             break;
     }
 }
@@ -486,7 +490,7 @@ int verifypass(char * pass){
             others++;
         }
     }
-    if(letters>0 && numeric > 0 && others == 0 && strlen(pass)>=3 && strlen(pass)<=7){
+    if(letters>0 && numeric > 0 && others == 0 && strlen(pass)>=4 && strlen(pass)<=6){
         valid = 1;
     }
     return valid;
@@ -533,6 +537,9 @@ int checkdata(int dia, int mes, int ano){
         }
     }
     else{
+        valid = 0;
+    }
+    if(ano<=0||mes<=0||dia<=0){
         valid = 0;
     }
     return valid;

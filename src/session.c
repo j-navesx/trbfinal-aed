@@ -38,7 +38,7 @@ int userCheck(char * mail, session s){
     return existeElemDicionario(s->users,mail);
 }
 
-int logIn(char * mail, char * pass, session s){
+int userLogin(char * mail, char * pass, session s){
     user us;
     us = elementoDicionario(s->users,mail);
     return (checkpass(us,pass));
@@ -102,6 +102,16 @@ void newRegist(char * pendura, char * condutor, char * date, session s){
     addBoleia(pend,bol);
 }
 
+int existUsersReg(char *usr, char * date, session s){
+    int exist = 0;
+    user us = elementoDicionario(s->users,usr);
+    boleia bol = getDeslocacao(us,date);
+    if(givenumPenduras(bol)>0){
+        exist = 1;
+    }
+    return exist;
+}
+
 void delBoleia(char * usr, char * date, session s){
     user us = elementoDicionario(s->users,usr);
     remBoleia(us,date);
@@ -125,7 +135,6 @@ iterador listDatas(char * date, session s){
         user us = seguinteIterador(it);
         boleia bol = getDeslocacao(us,date);
         if(bol != NULL){
-            // vetor[id] = bol;
             insertionSortAlpha(vetor,bol,id);
             id++;
         }

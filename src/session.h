@@ -10,7 +10,7 @@ session initialize(int capUsers);
 
 void registUser(char * usr, char * name, char * pass, session s);
 
-int logIn(char * username, char * pass, session s);
+int userLogin(char * username, char * pass, session s);
 
 int userCheck(char * mail, session s);
 
@@ -29,6 +29,8 @@ int checkDeslocacao(char *usr, char * date, session s);
 int numEmptySeats(char * mail, char * date, session s);
 
 void newRegist(char * pendura, char * condutor, char * data, session s);
+
+int existUsersReg(char *usr, char * date, session s);
 
 void delBoleia(char * usr, char * date, session s);
 

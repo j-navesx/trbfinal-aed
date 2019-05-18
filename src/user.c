@@ -11,7 +11,7 @@
 #include "user.h"
 
 #define MAXMAIL 20
-#define PASS 7
+#define PASS 6
 
 const char * key = "aed18!";
 
@@ -82,6 +82,7 @@ void addBoleia(user us, boleia bol){
 
 void remBoleia(user us, char * data){
     boleia bol = removeElemDicionario(us->boleiasregistadas,data);
+    us->numBoleias--;
     int pos = getPosUser(bol,mail(us));
     remPendura(bol,pos);
 }
@@ -153,9 +154,10 @@ int getnDeslocacoes(user us){
 }
 
 int checkpass(user us, char *pass){
+    pass[strlen(pass)-1] = '\0';
     char * test = (char *) malloc(PASS);
     xorstring(us->hashedPass,PASS,test);
-    if(strncmp(test,pass,8)){
+    if(strncmp(test,pass,7)==0){
         return 1;
     }
     else{

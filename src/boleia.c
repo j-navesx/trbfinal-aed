@@ -51,13 +51,13 @@ void remPendura(boleia bol, int pos){
 int getPosUser(boleia bol, char * us){
     iterador it = iteradorSequencia(bol->penduras);
     int pos = 0;
-    int id = 1;
+    int id = 0;
     while(temSeguinteIterador(it) && pos == 0){
+        id++;
         char * m = mail((user)seguinteIterador(it));
         if(strcmp(m,us) == 0){
             pos = id;
         }
-        id++;
     }
     destroiIterador(it);
     return pos;
