@@ -24,6 +24,8 @@ struct _bol{
     int numPenduras;
 };
 
+//* DESLOCACAO FORM
+
 boleia fillBoleia(char * mail, char * origem, char * destino,char * data){
     boleia bol = (boleia) malloc(sizeof(struct _bol));
     bol->origem = (char *) malloc(strlen(origem));
@@ -36,6 +38,8 @@ boleia fillBoleia(char * mail, char * origem, char * destino,char * data){
     bol->numPenduras = 0;
     return bol;
 }
+
+//* PENDURA FUNCTIONS
 
 void addPendura(boleia bol, void * pendura){
     bol->numPenduras++;
@@ -66,6 +70,8 @@ int getPosUser(boleia bol, char * us){
 iterador seqPenduras(boleia bol){
     return iteradorSequencia(bol->penduras);
 }
+
+//* GIVE FUNCTIONS
 
 char * giveMaster(boleia bol){
     return bol->mail;

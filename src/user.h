@@ -38,11 +38,9 @@ boleia getBoleia(user us, char * date);
 addDeslocacao - adicona uma nova deslocacao ao user
 Parametros:
     - user
-    - origem da viagem
-    - destino da viagem
-    - informacao (string com informacoes sobre a data hora duracao e lugares da viagem)
+    - boleia
 ***************************************/
-void addDeslocacao(user us, char *origem, char *destino, char * data);
+void addDeslocacao(user us, boleia bol);
 
 /***************************************
 remDeslocacao - remove uma deslocacao do user
@@ -67,6 +65,15 @@ Parametros:
     - data
 ***************************************/
 void remBoleia(user us, char * date);
+
+/***************************************
+getnDeslocacoes - devolve o numero de deslocacoes que o user tem
+Parametros:
+    - user
+Retorno:
+    (int) numero de deslocacoes
+***************************************/
+int getnDeslocacoes(user us);
 
 /***************************************
 getDeslocacaoOrd - devolve um iterador com as deslocacoes do user ordenadas por data
@@ -104,15 +111,6 @@ Retorno:
     0 - data1>=data2
 ***************************************/
 int compareDate(char * date1, char * date2);
-
-/***************************************
-getnDeslocacoes - devolve o numero de deslocacoes que o user tem
-Parametros:
-    - user
-Retorno:
-    (int) numero de deslocacoes
-***************************************/
-int getnDeslocacoes(user us);
 
 /***************************************
 checkpass - verifica se a pass do user e igual a inserida

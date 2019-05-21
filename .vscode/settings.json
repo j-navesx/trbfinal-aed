@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "user.h": "c",
-        "ctype.h": "c"
+        "ctype.h": "c",
+        "stdio.h": "c"
     },
     "python.pythonPath": "/usr/bin/python3"
 }

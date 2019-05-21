@@ -11,10 +11,19 @@
 #include "user.h"
 #include "session.h"
 
+#define MAXL 50
+#define MAXC 10
+
+#define MINPASS 4
+#define MAXPASS 6
+
+#define MAXUSERS 10000
 
 struct _sess{
     //Users dicionario
     dicionario users;
+    //Deslocacoes por data
+    dicionario datalist;
 };
 
 //*INITIALIZER
@@ -23,6 +32,10 @@ session initialize(int capUsers){
     s = (session) malloc(sizeof(struct _sess));
     s->users = criaDicionario(capUsers,1);
     if(s->users == NULL){
+        return NULL;
+    }
+    s->datalist = criaDicionario(capUsers,1);
+    if(s->datalist == NULL){
         return NULL;
     }
     return s;
@@ -80,12 +93,29 @@ int checkDeslocacao(char *usr, char * date, session s){
 
 void newDeslocacao(char * usr, session s, char * origem, char * destino, char * datacmd){
     user us = elementoDicionario(s->users,usr);
-    addDeslocacao(us,origem,destino,datacmd);
+    boleia bol = fillBoleia(getMail(us),origem,destino,datacmd);
+    addDeslocacao(us,bol);
+    char * date = (char*) malloc(sizeof(char)* MAXL);
+    sscanf(datacmd,"%s",date);
+    //If Date doesnt exist in database
+    if(!existeElemDicionario(s->datalist,date)){
+        adicionaElemDicionario(s->datalist,date,criaDicionario(MAXUSERS,1));
+        dicionario d = elementoDicionario(s->datalist,date);
+        adicionaElemDicionario(d,usr,bol);
+    }
+    else{
+        dicionario d = elementoDicionario(s->datalist,date);
+        adicionaElemDicionario(d,usr,bol);
+    }
 }
 
 void delDeslocacao(char * usr, char * date, session s){
     user us = elementoDicionario(s->users,usr);
     remDeslocacao(us,date);
+    if(existeElemDicionario(s->datalist,date)){
+        dicionario d = elementoDicionario(s->datalist,date);
+        removeElemDicionario(d,usr);
+    }
 }
 
 int numEmptySeats(char * mail, char * date, session s){
@@ -117,6 +147,8 @@ void delBoleia(char * usr, char * date, session s){
     remBoleia(us,date);
 }
 
+//* LIST FUNCTIONS
+
 iterador listDeslocacoes(char * usr, session s){
     user us = elementoDicionario(s->users,usr);
     return getDeslocacaoOrd(us);
@@ -129,19 +161,26 @@ iterador listBoleias(char * usr, session s){
 
 iterador listDatas(char * date, session s){
     boleia * vetor = (boleia *) malloc(sizeof(boleia) * tamanhoDicionario(s->users));
-    iterador it = iteradorDicionario(s->users);
     int id = 0;
-    while(temSeguinteIterador(it)){
-        user us = seguinteIterador(it);
-        boleia bol = getDeslocacao(us,date);
-        if(bol != NULL){
+    if(existeElemDicionario(s->datalist,date)){
+        dicionario d = elementoDicionario(s->datalist,date);
+        iterador it = iteradorDicionario(d);
+        while(temSeguinteIterador(it)){
+            boleia bol = seguinteIterador(it);
             insertionSortAlpha(vetor,bol,id);
             id++;
         }
+        destroiIterador(it);
     }
-    destroiIterador(it);
+    
     return (criaIterador((void **)vetor,id));
 }
+
+iterador listUsersReg(boleia bol){
+    return seqPenduras(bol);
+}
+
+//* SORT ALGORITHM
 
 void insertionSortAlpha(boleia * vetor, boleia bol, int size){
     int i=0;
@@ -149,8 +188,4 @@ void insertionSortAlpha(boleia * vetor, boleia bol, int size){
         vetor[i] = vetor[i-1];
     }
     vetor[i] = bol;
-}
-
-iterador listUsersReg(boleia bol){
-    return seqPenduras(bol);
 }

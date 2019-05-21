@@ -24,10 +24,10 @@ struct _usr{
     char mail[MAXMAIL];
     char * nome;
     char hashedPass[PASS];
-    //Deslocacao (sem ser ordenado)
+    //Dictionary of deslocacoes
     dicionario dicboleias;
     int numDeslocacoes;
-    //Registos ligados com dicionario
+    //Dictionary of boleias
     dicionario boleiasregistadas;
     int numBoleias;
 };
@@ -42,6 +42,8 @@ void encryption(user us,char * pass){
     xorstring(pass,PASS,us->hashedPass);
 }
 
+//* USER FORM
+
 user fillUser(char * mail, char * name, char * pass){
     user us = (user) malloc(sizeof(struct _usr));
     us->nome = (char * ) malloc(strlen(name));
@@ -54,6 +56,8 @@ user fillUser(char * mail, char * name, char * pass){
     us->numBoleias = 0;
     return us;
 }
+
+//* BOLEIA GETTERS
 
 boleia getDeslocacao(user us, char * date){
     if(existeElemDicionario(us->dicboleias,date)){
@@ -69,8 +73,9 @@ boleia getBoleia(user us, char * date){
     return NULL;
 }
 
-void addDeslocacao(user us, char *origem, char *destino, char * data){
-    boleia bol = fillBoleia(getMail(us),origem,destino,data);
+//* DESLOCACOES RELATED FUNCTIONS
+
+void addDeslocacao(user us, boleia bol){
     adicionaElemDicionario(us->dicboleias,giveDate(bol),bol);
     us->numDeslocacoes++;
 }
@@ -92,6 +97,12 @@ void remBoleia(user us, char * date){
     remPendura(bol,pos);
 }
 
+int getnDeslocacoes(user us){
+    return us->numDeslocacoes;
+}
+
+//* BOLEIAS SORT FUNCTIONS
+
 iterador getDeslocacaoOrd(user us){
     boleia * vetor = (boleia *) malloc(sizeof(boleia) * us->numDeslocacoes);
     int size = us->numDeslocacoes;
@@ -108,6 +119,8 @@ iterador getBoleiasOrd(user us){
     return (criaIterador((void **)vetor,size));
 }
 
+//* SORT ALGORITHM
+
 void insertionSort(iterador it, boleia * vetor){
     boleia boldic;
     int id = 0;
@@ -122,6 +135,8 @@ void insertionSort(iterador it, boleia * vetor){
     }
     destroiIterador(it);
 }
+
+//* DATE COMPARER
 
 int compareDate(char * date1, char * date2){
     int menor = -1;
@@ -154,9 +169,7 @@ int compareDate(char * date1, char * date2){
     return menor;
 }
 
-int getnDeslocacoes(user us){
-    return us->numDeslocacoes;
-}
+//* PASSWORD CHECKER FUNCTION
 
 int checkpass(user us, char *pass){
     pass[strlen(pass)-1] = '\0';
@@ -169,6 +182,8 @@ int checkpass(user us, char *pass){
         return 0;
     }
 }
+
+//* USER INFO GETTERS
 
 char * getName(user us){
     return us->nome;

@@ -11,13 +11,13 @@
 #include "user.h"
 #include "session.h"
 
-#define MAXL 50
-#define MAXC 10
+#define MAXL 50 //MAX LINE CHARACTERS
+#define MAXC 10 //MAX COMMAND CHARACTERS
 
-#define MINPASS 4
-#define MAXPASS 6
+#define MINPASS 4 //PASS MINIMUM
+#define MAXPASS 6 //PASS MAXIMUM
 
-#define MAXUSERS 10000
+#define MAXUSERS 10000 //MAX USERS
 
 //MENUS
 void inicialmenu(session s);
@@ -138,6 +138,7 @@ void sessionmenu(char * user, session s){
     }
 }
 
+//* MENU FUNCTIONS NUMBER ATRIBUTION
 
 int imenuselection(char * cmd){
     int cmdint = -1;
@@ -163,8 +164,8 @@ int smenuselection(char * cmd){
     return cmdint;
 }
 
+//* INICIAL SELECT
 
-//INICIAL SELECT
 void selecAjudaI(){
     printf("ajuda - Mostra os comandos existentes\n");
     printf("termina - Termina a execucao do programa\n");
@@ -242,8 +243,8 @@ void selecTermina(){
     printf("Obrigado. Ate a proxima.\n");
 }
 
+//* SESSION SELECT
 
-//SESSION SELECT
 void selecAjudaS(){
     printf("ajuda - Mostra os comandos existentes\n");
     printf("sai - Termina a sessao deste utilizador no programa\n");
@@ -360,6 +361,8 @@ void selecRemove(char * user, char * cmd, session s){
     }
 }
 
+//* LISTA OPTIONS
+
 void selecLista(char * cmd, session s, char * user){
     char * option = (char *) malloc(MAXL);
     int selec = -1;
@@ -384,6 +387,8 @@ void selecLista(char * cmd, session s, char * user){
     listMenu(selec,s,user,option);
 }
 
+//* LISTA SELECTER
+
 void listMenu(int selection, session s, char * master,char * data){
     switch(selection){
         case 0:
@@ -403,6 +408,8 @@ void listMenu(int selection, session s, char * master,char * data){
             break;
     }
 }
+
+//* LIST DISPLAY FUNCTION
 
 void displayViagens(boleia bol){
     printf("%s\n",giveMaster(bol));
@@ -427,6 +434,8 @@ void displayViagens(boleia bol){
     }
     printf("\n");
 }
+
+//* LISTA FUNCTIONS
 
 void listaMinhas(session s, char * user){
     iterador deslocacoes = listDeslocacoes(user,s);
@@ -480,6 +489,10 @@ void selecSai(char * user, session s){
     printf("Fim de sessao. Obrigado %s.\n", userName(user,s));
 }
 
+//* HELPER FUNCTIONS
+
+//* PASSWORD CONDITIONS VERIFIER
+
 int verifypass(char * pass){
     int valid = 0;
     int numeric = 0, letters = 0, others = 0;
@@ -496,12 +509,14 @@ int verifypass(char * pass){
         }
     }
     
-    if(letters>0 && numeric > 0 && others == 0 && strlen(pass)>=4 && strlen(pass)<=6){
+    if(letters>0 && numeric > 0 && others == 0 && strlen(pass)>=MINPASS && strlen(pass)<=MAXPASS){
         valid = 1;
     }
     
     return valid;
 }
+
+//* DATE CHECKERS
 
 int checkstrdate(char * date){
     int dia,mes,ano;
@@ -552,6 +567,8 @@ int checkdate(int dia, int mes, int ano){
     return valid;
 }
 
+//* TIME CHECKER
+
 int checkhoranminuto(int hora,int minuto){
     int valid;
     
@@ -569,6 +586,9 @@ int checkhoranminuto(int hora,int minuto){
 
     return valid;
 }
+
+//* LOWER INPUT FUNCTION
+
 char* lowerIN(char * input, int size){
     char *out = malloc(size);
     int i;
