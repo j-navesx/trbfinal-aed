@@ -1,0 +1,5 @@
+
+lista data verificar data? Yes
+dicionario de um dicionario best solution? Yes
+-----------------------------------------------
+onde inicializar o iterador? (session)
