@@ -110,8 +110,8 @@ Parametros:
     - elemento a pesquisar
     - minimo da procura
     - maximo da procura
-    - funcao de comparacao
-    - funcao de recolha de dados
+    - funcao de comparacao com outputs e inputs semelhantes ao strcmp
+    - funcao de recolha de dados com output char*
 Retorno:
     (int) posicao a ser inserido
 ***************************************/
