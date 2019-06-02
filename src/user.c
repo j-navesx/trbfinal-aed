@@ -73,6 +73,17 @@ boleia getBoleia(user us, char * date){
     return NULL;
 }
 
+boleia * getVecBoleia (iterador it,int size){
+    boleia * vetor = (boleia *) malloc(sizeof(boleia)*size);
+    int id=0; 
+    while(temSeguinteIterador(it)){
+        vetor[id]=seguinteIterador(it);
+        id++;
+    }
+    destroiIterador(it);
+    return vetor;
+}
+
 //* DESLOCACOES RELATED FUNCTIONS
 
 void addDeslocacao(user us, boleia bol){
@@ -104,69 +115,102 @@ int getnDeslocacoes(user us){
 //* BOLEIAS SORT FUNCTIONS
 
 iterador getDeslocacaoOrd(user us){
-    boleia * vetor = (boleia *) malloc(sizeof(boleia) * us->numDeslocacoes);
-    int size = us->numDeslocacoes;
     iterador it = iteradorDicionario(us->dicboleias);
-    insertionSort(it,vetor);
+    int size = us->numDeslocacoes;
+    boleia * vetor = getVecBoleia(it,size);
+    insertionSort(vetor,size,compareDate,giveDate);
     return (criaIterador((void **)vetor,size));
 }
 
 iterador getBoleiasOrd(user us){
-    boleia * vetor = (boleia *) malloc(sizeof(boleia) * us->numBoleias);
-    int size = us->numBoleias;
     iterador it = iteradorDicionario(us->boleiasregistadas);
-    insertionSort(it,vetor);
+    int size = us->numBoleias;
+    boleia * vetor = getVecBoleia(it,size);
+    insertionSort(vetor,size,compareDate,giveDate);
     return (criaIterador((void **)vetor,size));
 }
 
 //* SORT ALGORITHM
 
-void insertionSort(iterador it, boleia * vetor){
-    boleia boldic;
-    int id = 0;
-    int i =0;
-    while(temSeguinteIterador(it)){
-        boldic = seguinteIterador(it);
-        for(i = id; i>0 && compareDate(giveDate(boldic),giveDate(vetor[i-1])) != 0; i--){
-            vetor[i] = vetor[i-1];
+int binarySearch(boleia * vetor, boleia elem, int low, int high, int compare(const char*, const char*), char* giveFunc(boleia)){
+    char * elemCh = giveFunc(elem);
+    
+    if(high <= low){
+        if(compare(elemCh,giveFunc(vetor[low]))>0){
+            return low+1;
         }
-        vetor[i] = boldic;
-        id++;
+        else{
+            return low;
+        }
     }
-    destroiIterador(it);
+    
+    int mid = (low + high)/2;
+
+    if(compare(elemCh,giveFunc(vetor[mid]))==0){ 
+        return mid+1; 
+    }
+
+    if(compare(elemCh,giveFunc(vetor[mid]))>0){
+        return binarySearch(vetor, elem, mid+1, high, compare, giveFunc);
+    }
+
+    return binarySearch(vetor, elem, low, mid-1, compare, giveFunc); 
+}
+
+void insertionSort(boleia * vetor, int size, int compare(const char*, const char*), char* giveFunc(boleia)){
+    boleia selected;
+    int i, loc, j;
+    for (i = 1; i < size; i++) { 
+        j = i - 1; 
+        selected = vetor[i]; 
+  
+        // find location where selected sould be inseretd 
+        loc = binarySearch(vetor, selected, 0, j,compare,giveFunc); 
+  
+        // Move all elements after location to create space 
+        while (j >= loc) 
+        { 
+            vetor[j+1] = vetor[j]; 
+            j--; 
+        } 
+        vetor[j+1] = selected; 
+    } 
 }
 
 //* DATE COMPARER
 
-int compareDate(char * date1, char * date2){
-    int menor = -1;
+int compareDate(const char * date1, const char * date2){
+    int result;
     int dia1,mes1,ano1;
     int dia2,mes2,ano2;
     sscanf(date1,"%d-%d-%d",&dia1,&mes1,&ano1);
     sscanf(date2,"%d-%d-%d",&dia2,&mes2,&ano2);
     if(ano1<ano2){
-        menor = 1;
+        result = -1;
     }
     else if(ano1==ano2){
         if(mes1<mes2){
-            menor = 1;
+            result = -1;
         }
         else if(mes1==mes2){
             if(dia1<dia2){
-                menor = 1;
+                result = -1;
+            }
+            else if(dia1 == dia2){
+                result = 0;
             }
             else{
-                menor = 0;
+                result = 1;
             }
         }
         else{
-            menor = 0;
+            result = 1;
         }
     }
     else{
-        menor = 0;
+        result = 1;
     }
-    return menor;
+    return result;
 }
 
 //* PASSWORD CHECKER FUNCTION

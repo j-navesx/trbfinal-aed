@@ -35,6 +35,16 @@ Retorno:
 boleia getBoleia(user us, char * date);
 
 /***************************************
+getVecBoleia - devolve um vetor com as viagens de um iterador
+Parametros:
+    - iterador
+    - tamanho do vetor
+Retorno:
+    (boleia *) vetor de viagens
+***************************************/
+boleia * getVecBoleia (iterador it,int size);
+
+/***************************************
 addDeslocacao - adicona uma nova deslocacao ao user
 Parametros:
     - user
@@ -94,12 +104,28 @@ Retorno:
 iterador getBoleiasOrd(user us);
 
 /***************************************
-insertionSort - ordena boleias por data
+binarySearch - faz a procura do local onde o elemento tem de ser inserido
 Parametros:
-    - iterador a usar
-    - vetor de boleias
+    - vetor de viagens
+    - elemento a pesquisar
+    - minimo da procura
+    - maximo da procura
+    - funcao de comparacao
+    - funcao de recolha de dados
+Retorno:
+    (int) posicao a ser inserido
 ***************************************/
-void insertionSort(iterador it, boleia * vetor);
+int binarySearch(boleia * vetor, boleia elem, int low, int high, int compare(const char*, const char*), char* giveFunc(boleia));
+
+/***************************************
+insertionSort - ordena viagens por data
+Parametros:
+    - vetor de viagens
+    - tamanho do vetor
+    - funcao de comparacao
+    - funcao de recolha de dados
+***************************************/
+void insertionSort(boleia * vetor, int size, int compare(const char*, const char*), char* giveFunc(boleia));
 
 /***************************************
 compareDate - compara duas datas em formato string
@@ -107,10 +133,11 @@ Parametros:
     - data1
     - data2
 Retorno:
-    1 - data1<data2
-    0 - data1>=data2
+    -1 - data1<data2
+    0 - data1==data2
+    1 - data1>data2
 ***************************************/
-int compareDate(char * date1, char * date2);
+int compareDate(const char * date1, const char * date2);
 
 /***************************************
 checkpass - verifica se a pass do user e igual a inserida

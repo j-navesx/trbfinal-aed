@@ -184,15 +184,6 @@ Retorno:
 iterador listDatas(char * date, session s);
 
 /***************************************
-insertionSortAlpha - algoritmo de ordenacao por ordem alfabetica
-Parametros:
-    - vetor (boleias)
-    - boleia (elemento a inserir)
-    - size (tamanho do vetor)
-***************************************/
-void insertionSortAlpha(boleia * vetor, boleia bol, int size);
-
-/***************************************
 listUsersReg - iterador para listar users registados numa boleia
 Parametros:
     - boleia

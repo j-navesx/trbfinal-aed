@@ -160,32 +160,19 @@ iterador listBoleias(char * usr, session s){
 }
 
 iterador listDatas(char * date, session s){
-    boleia * vetor = (boleia *) malloc(sizeof(boleia) * tamanhoDicionario(s->users));
-    int id = 0;
+    int size = 0;
+    boleia * vetor = (boleia *) malloc(sizeof(boleia)*MAXUSERS);
     if(existeElemDicionario(s->datalist,date)){
         dicionario d = elementoDicionario(s->datalist,date);
         iterador it = iteradorDicionario(d);
-        while(temSeguinteIterador(it)){
-            boleia bol = seguinteIterador(it);
-            insertionSortAlpha(vetor,bol,id);
-            id++;
-        }
-        destroiIterador(it);
+        size = tamanhoDicionario(d);
+        vetor = getVecBoleia(it,size);
+        insertionSort(vetor,size,strcmp,giveMaster);
     }
     
-    return (criaIterador((void **)vetor,id));
+    return (criaIterador((void **)vetor,size));
 }
 
 iterador listUsersReg(boleia bol){
     return seqPenduras(bol);
-}
-
-//* SORT ALGORITHM
-
-void insertionSortAlpha(boleia * vetor, boleia bol, int size){
-    int i=0;
-    for(i = size; i>0 && strcmp(giveMaster(vetor[i-1]),giveMaster(bol))>0; i--){
-        vetor[i] = vetor[i-1];
-    }
-    vetor[i] = bol;
 }
