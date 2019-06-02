@@ -122,8 +122,8 @@ insertionSort - ordena viagens por data
 Parametros:
     - vetor de viagens
     - tamanho do vetor
-    - funcao de comparacao
-    - funcao de recolha de dados
+    - funcao de comparacao com outputs e inputs semelhantes ao strcmp
+    - funcao de recolha de dados com output char*
 ***************************************/
 void insertionSort(boleia * vetor, int size, int compare(const char*, const char*), char* giveFunc(boleia));
 
