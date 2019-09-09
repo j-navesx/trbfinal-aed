@@ -183,6 +183,7 @@ Retorno:
 ***************************************/
 iterador listDatas(char * date, session s);
 
+
 /***************************************
 listUsersReg - iterador para listar users registados numa boleia
 Parametros:
