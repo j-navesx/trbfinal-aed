@@ -10,6 +10,7 @@
 #include "boleia.h"
 #include "user.h"
 
+
 struct _bol{
     char * mail;
     char * origem;
@@ -44,7 +45,7 @@ boleia fillBoleia(char * mail, char * origem, char * destino,char * data){
 void addPendura(boleia bol, void * pendura){
     bol->numPenduras++;
     adicionaPosSequencia(bol->penduras,pendura,bol->numPenduras);
-    
+
 }
 
 void remPendura(boleia bol, int pos){
